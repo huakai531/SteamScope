@@ -300,6 +300,25 @@ test("messenger has local day separators, grouped messages, quiet status and acc
       width === 390 ? 780 : 900,
     );
   }
+  // A real reading position remains distinct from resize-induced scrolling.
+  await page.locator(".chat-history").evaluate((el) => {
+    el.scrollTop = 0;
+  });
+  await expect(
+    page.getByRole("button", { name: "Jump to latest" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 800 });
+  await expect
+    .poll(() => page.locator(".chat-history").evaluate((el) => el.scrollTop))
+    .toBeLessThan(3);
+  await page.getByRole("button", { name: "Jump to latest" }).click();
+  await expect
+    .poll(() =>
+      page
+        .locator(".chat-history")
+        .evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight),
+    )
+    .toBeLessThan(3);
   await page.getByRole("button", { name: "Back to conversations" }).click();
   await capture(page, "messages-list-mobile");
   await expect(page.locator(".conversation-time")).toBeVisible();

@@ -127,8 +127,12 @@ test("logged-out product landing, keyboard preview, responsive hierarchy and no 
     const font = await page.locator("h1").evaluate((e) => ({
       size: parseFloat(getComputedStyle(e).fontSize),
       line: parseFloat(getComputedStyle(e).lineHeight),
+      family: getComputedStyle(e).fontFamily,
     }));
-    expect(heading!.height).toBeLessThanOrEqual(font.line * 2 + 1);
+    expect(
+      heading!.height,
+      JSON.stringify({ viewport: width, heading, font }),
+    ).toBeLessThanOrEqual(font.line * 2 + 1);
     if (width === 1440) {
       expect(font.size).toBeGreaterThanOrEqual(52);
       expect(font.size).toBeLessThanOrEqual(64);

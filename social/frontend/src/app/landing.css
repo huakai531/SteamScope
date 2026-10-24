@@ -58,6 +58,7 @@
 }
 .landing-v4 h1 {
   margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
   font-size: clamp(52px, 4.3vw, 62px);
   line-height: 1.07;
   letter-spacing: -2.8px;

@@ -68,6 +68,7 @@ export function ChatApp() {
   const historyRows = useRef<ChatMessage[]>([]);
   const historyPanel = useRef<HTMLOListElement>(null);
   const nearBottom = useRef(true);
+  const historySize = useRef({ width: 0, height: 0 });
   const [awayFromLatest, setAwayFromLatest] = useState(false);
   const historyAnchor = useRef<{ height: number; top: number } | null>(null);
   const composer = useRef<HTMLTextAreaElement>(null);
@@ -88,12 +89,20 @@ export function ChatApp() {
 
   // Keep the latest message anchored when the viewport/composer changes size.
   // A reader who has scrolled back keeps their position instead.
-  useEffect(() => {
+  useLayoutEffect(() => {
     const panel = historyPanel.current;
     if (!panel) return;
+    historySize.current = {
+      width: panel.clientWidth,
+      height: panel.clientHeight,
+    };
     const observer = new ResizeObserver(() => {
       if (nearBottom.current && !historyAnchor.current)
         panel.scrollTop = panel.scrollHeight;
+      historySize.current = {
+        width: panel.clientWidth,
+        height: panel.clientHeight,
+      };
     });
     observer.observe(panel);
     return () => observer.disconnect();
@@ -648,6 +657,13 @@ export function ChatApp() {
                       tabIndex={0}
                       onScroll={(event) => {
                         const panel = event.currentTarget;
+                        // Resize can emit scroll before ResizeObserver. Preserve the
+                        // previous reading intent until the new geometry is handled.
+                        if (
+                          panel.clientWidth !== historySize.current.width ||
+                          panel.clientHeight !== historySize.current.height
+                        )
+                          return;
                         nearBottom.current =
                           panel.scrollHeight -
                             panel.scrollTop -

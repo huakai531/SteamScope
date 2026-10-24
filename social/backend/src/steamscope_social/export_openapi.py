@@ -11,7 +11,7 @@ def main() -> None:
     schema = create_app(config).openapi()
     target = SOCIAL_ROOT / "docs" / "api" / "openapi.json"
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(schema, indent=2) + "\n", encoding="utf-8")
+    target.write_text(json.dumps(schema, indent=2) + "\n", encoding="utf-8", newline="\n")
     print("Exported Phase 6 OpenAPI; no service connection required")
 
 

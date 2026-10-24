@@ -1,37 +1,27 @@
-# GitHub public-source settings plan
+# GitHub public-source security
 
-**Planning only — no repository created, settings changed, secrets configured or push performed.** Reviewed 2026-10-24. Public source is distinct from a public live service.
+Published on **2026-10-24** to [huakai531/SteamScope](https://github.com/huakai531/SteamScope), following explicit owner authorization. The source is public; the web application is not publicly deployed.
 
-The owner approved Option B, clean history and MIT for the local candidate. After a separate explicit remote-publication approval:
+## Verified repository settings
 
-- [ ] Create the approved `SteamScope` source repository with public visibility and default branch `main`.
-- [ ] Enable/verify secret scanning and push protection. Review any alerts before inviting contributions; do not bypass a real credential finding.
-- [ ] Enable Dependabot alerts. Enable security-update PRs where supported; review them and rerun tests before merging. No automatic acceptance of updates.
-- [ ] Enable private vulnerability reporting under Security. Verify that **Report a vulnerability** is available before advertising it as an active channel.
-- [ ] Set Actions default workflow permissions to read repository contents; do not allow Actions to create/approve PRs.
-- [ ] Restrict allowed actions to approved publishers and the reviewed SHA-pinned actions. Review upstream updates explicitly.
-- [ ] Require approval for **all outside collaborators' fork workflow runs**, not only first-time contributors. Use disposable GitHub-hosted runners; no self-hosted runners for untrusted PRs.
-- [ ] Do not enable write tokens or repository/environment secrets for fork PRs. Keep `pull_request_target` and privileged artifact-driven execution out of these tests.
-- [ ] Require a PR and review for `main`, prohibit force-push/deletion, and resolve review conversations. Add only the status-check names actually observed after the first successful CI run; do not invent a green required check now.
-- [ ] Keep Issues enabled for non-sensitive bugs; direct security details to private reporting. Discussions are optional and can remain disabled.
-- [ ] Confirm no deployment environments, credentials, public tunnels or live hosting are created by source publication.
+- Public visibility; default branch `main`; MIT license; reviewed description and ten relevant topics.
+- Secret scanning and push protection enabled. Open secret-scanning alerts: zero at publication review; new alerts require triage, never automatic dismissal.
+- Dependabot alerts and security updates enabled. No broad version-update schedule was added.
+- Private vulnerability reporting enabled through GitHub.
+- Actions defaults to read-only and cannot approve pull requests. All outside contributors' fork runs require approval.
+- Only the four reviewed, exact SHA-pinned Actions are allowed; no blanket publisher or GitHub-owned action allowance.
+- No Actions secrets or application deployment credentials were added. Issues remain for non-sensitive bugs.
 
-The workflow retains `contents: read`, SHA-pinned actions, checkout without persisted credentials, lockfile installs, isolated PostgreSQL/Redis, no real Steam key, and fixture provider responses. Its only uploaded artifacts are npm audit JSON with seven-day retention; no environment, browser traces, screenshots, chat history or database exports are uploaded.
+## Main-branch maintenance policy
 
-**CI PUBLIC SAFETY: READY** for the proposed retained `social/` layout and reviewed code. **REMOTE CI: READY TO EXECUTE AFTER PUBLICATION; execution status NOT EXECUTED.** Confirm runner/version availability on the first actual run; local checks do not prove GitHub-hosted execution.
+After actual successful checks on the latest publication commit, main is to require a pull request, up-to-date `backend`, `frontend`, `compose` and `dependency-audit` checks, and resolved conversations. Force pushes and deletion are prohibited. The solo maintainer does not need a second person's approval: the approval count is zero. Administrator enforcement is intended; no custom bypass is authorized. The GitHub branch-protection settings are the authoritative current state.
 
-Official references: [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use), [secret scanning](https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning), [private vulnerability reporting](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository), [approving fork workflow runs](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/approve-runs-from-forks).
+## CI boundary
 
-## Suggested repository metadata
+[The publication validation run](https://github.com/huakai531/SteamScope/actions/runs/40084501360) passed. The [validation record](../development/VALIDATION.md) preserves initial failures, focused fixes and actual counts. Check Actions for any later commit rather than assuming this run covers it.
 
-Name: **SteamScope**. Recommend **A** for clear product scope:
+The workflow uses `contents: read`, SHA-pinned actions, checkout without persisted credentials, locked installs, isolated PostgreSQL/Redis, no real Steam key and fixture provider responses. Its only uploaded artifacts are npm audit JSON with seven-day retention; no environment files, traces, screenshots, chat history or database exports are uploaded. Never enable privileged `pull_request_target` execution for untrusted code.
 
-A. A Steam-data-driven social platform for player profiles, discovery, connections, and real-time chat.
+Official references: [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use), [secret scanning](https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning), [private reporting](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository).
 
-B. Turn Steam gaming history into player identity, discovery, and real-time social connections.
-
-C. A privacy-aware Steam social platform built with FastAPI, Next.js, PostgreSQL, Redis, and WebSockets.
-
-Topics: `steam`, `gaming`, `social-network`, `fastapi`, `nextjs`, `postgresql`, `redis`, `websocket`, `typescript`, `python`.
-
-No public email is proposed. A Code of Conduct is optional for this individual portfolio; add one if a contributor community develops. `CONTRIBUTING.md` provides lightweight expectations now.
+**Public production deployment remains unapproved.** Production hardening is separate work.

@@ -167,4 +167,4 @@ Account routes include `/account/profile`, `/account/privacy`, `/account/session
 
 Do not print full Compose interpolation, container environments, `.env`, credential-bearing URLs or raw provider/chat payloads. HTTP client/access logging is restricted by the application. Report unit, real-service, browser, runtime and live-user evidence separately; a weaker layer does not prove a stronger one.
 
-The [public validation summary](../development/VALIDATION.md) separates current UI checks from historical backend/live acceptance. Detailed original command/phase evidence is retained privately. Remote CI remains **NOT EXECUTED**; public deployment is not authorized.
+The [public validation summary](../development/VALIDATION.md) separates current UI checks from historical backend/live acceptance. Detailed original command/phase evidence is retained privately. Actual remote runs are linked in that summary; public deployment is not authorized.

@@ -2,7 +2,7 @@
 
 Executed **2026-10-24** inside this separate candidate, using its own clean installs and isolated Docker project, PostgreSQL volume, Redis and loopback ports. No development database or real account was copied. No live Steam call was used.
 
-## Actual current results
+## Initial independent local candidate results
 
 | Check | Exit / result |
 | --- | --- |
@@ -34,7 +34,7 @@ Two initial uv attempts failed while resolving the local Python interpreter (exi
 
 Preserved warnings: ESLint 9.39.5 emits a deprecation notice; Starlette's HTTPX TestClient emits a deprecation warning; the browser server reports the known `next start` / standalone-output warning and NO_COLOR notice. Tests actually passed. Docker uses the standalone entrypoint. These warnings are not suppressed and should be reviewed in future compatible tooling updates.
 
-`uv pip check` checks dependency consistency, **not a backend CVE database**. No dedicated backend vulnerability scanner is configured or claimed here. Zero npm findings do not establish production security. Hosted CI, load testing, backup/restore operations and deployment hardening remain unverified.
+`uv pip check` checks dependency consistency, **not a backend CVE database**. No dedicated backend vulnerability scanner is configured or claimed here. Zero npm findings do not establish production security. The initial local gate did not establish hosted CI results; the later publication run is recorded below. Load testing, backup/restore operations and deployment hardening remain unverified.
 
 ## Candidate privacy and secret review
 
@@ -48,4 +48,23 @@ Nine actual PNGs were manually inspected; their metadata and SHA-256 are recorde
 
 Before packaging, separate **USER VERIFIED + SERVER VERIFIED** acceptance covered real Steam login/data, achievement progress after a source-privacy change, confirmed-empty Steam friends, and persistent two-user chat with reads, typing, presence and blocking. Those flows were **not repeated** for the candidate. Synthetic screenshots do not replace historical live evidence or imply adoption.
 
-**REMOTE CI: NOT EXECUTED.** Public source publication awaits explicit owner approval. **Public production deployment remains unsupported and unapproved.**
+## Public-source publication validation — 2026-10-24
+
+The owner authorized publication of this clean candidate. The [initial run](https://github.com/huakai531/SteamScope/actions/runs/40083431313) failed: the OpenAPI export differed only in Windows/Linux line endings, and the Linux landing-heading assertion observed three lines instead of two. Its successful local results above are retained without claiming that they established remote compatibility.
+
+The exporter now writes LF explicitly; a new unit test checks repeatable UTF-8/LF output. The heading uses an explicit portable font fallback without changing its two-line assertion. Focused local testing also exposed a resize/scroll ordering issue in chat; the fix preserves reading intent, with an added regression that verifies a reader stays at their chosen history position.
+
+Local fix checks: backend export regression **1 passed**; Ruff, formatting and MyPy exit 0; frontend format/lint/typecheck/build exit 0; frontend unit **59 passed**; affected Windows browser selection **6 passed**; Linux landing **4 passed** and final-polish/chat **2 passed**. Browser counts overlap the complete suite and are not additive. An initial private Linux harness used the wrong fixture origin and failed before page load; using the documented loopback fixture origin passed without changing application code.
+
+**REMOTE CI: PASSED** — [SteamScope local MVP validation](https://github.com/huakai531/SteamScope/actions/runs/40084501360) at `094fb376a6522838cbd9c66fe4a874445e9d5218`.
+
+| Remote job | Actual result |
+| --- | --- |
+| backend | Passed; 314 tests, migration, Worker check, generated contract and repository checks |
+| frontend | Passed; 59 unit tests, production build, 4 landing checks and 32 authenticated browser checks |
+| compose | Passed; five-service build/startup, health, migration, Worker and anonymous-auth checks |
+| dependency-audit | Passed; full and production audit each exit 0, zero findings |
+
+The two remote browser selections total 36 cases. Local focused subsets above overlap these cases and are not added to that total. CI used disposable services, an empty Steam API key and deterministic fixtures. The only uploaded files were the two npm audit JSON reports; no user snapshots or browser traces were uploaded. Checks against configured local private values found no matches in logs/artifacts; this is a bounded review, not proof about all unknown secrets.
+
+The public repository starts at the reviewed portfolio baseline and preserves normal follow-up commits. See [Actions](https://github.com/huakai531/SteamScope/actions/workflows/social-ci.yml) for results on later commits. **Public production deployment remains unsupported and unapproved.**

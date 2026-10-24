@@ -93,4 +93,4 @@ return 503 while liveness stays 200; after restoration readiness returns 200 and
 The same resident worker survives both interruptions without restart. No live Steam job is enqueued.
 Incomplete personal responses over saved snapshots are hidden as unknown and keep prior success
 time/rows until a later complete observation. The [public validation summary](../development/VALIDATION.md) separates
-these current checks from earlier real user observations and from NOT EXECUTED remote CI.
+these current checks from earlier real user observations and from separately recorded fixture-based remote CI.

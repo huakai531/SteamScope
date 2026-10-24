@@ -111,7 +111,7 @@ Tests use synthetic identities and provider fixtures in isolated resources. They
 
 The live Steam friend path was confirmed empty, matching the user's account; it was not a nonempty friend-import demonstration. Real two-user comparison was not separately verified. The portfolio screenshots are separately reviewed synthetic illustrations, not real account captures.
 
-Remote CI is **NOT EXECUTED**. On 2026-10-24, full and production npm audits both returned exit 0 / 0 findings. The former braces exception is resolved because the official advisory was withdrawn, not because its dependency path disappeared. Historical failed audits remain preserved. [Current security status](../security/CURRENT_SECURITY_STATUS.md)
+The [remote validation run](https://github.com/huakai531/SteamScope/actions/runs/40084501360) passed on 2026-10-24 using isolated services and deterministic fixtures; this is separate from live-user evidence. On 2026-10-24, full and production npm audits both returned exit 0 / 0 findings. The former braces exception is resolved because the official advisory was withdrawn, not because its dependency path disappeared. Historical failed audits remain preserved. [Current security status](../security/CURRENT_SECURITY_STATUS.md)
 
 ## What I learned
 

@@ -63,7 +63,7 @@ Next.js 16, React 19, TypeScript, adapted Beautiful UI Free components, FastAPI,
 
 ## Validation
 
-See the [candidate validation record](social/docs/development/VALIDATION.md) for actual local test counts, exit codes, independent container checks and scan limits. Historical owner-verified Steam and two-user chat acceptance is clearly separated from this candidate's deterministic tests and synthetic screenshots. **Remote CI has not run.**
+See the [candidate validation record](social/docs/development/VALIDATION.md) for actual local test counts, exit codes, independent container checks and scan limits. Historical owner-verified Steam and two-user chat acceptance is clearly separated from this candidate's deterministic tests and synthetic screenshots. [GitHub Actions](https://github.com/huakai531/SteamScope/actions/workflows/social-ci.yml) runs the isolated validation workflow. The linked validation record preserves actual results and earlier failures.
 
 ## Local development
 
@@ -88,7 +88,6 @@ The local MVP covers identity, Steam data, profiles, discovery, consent-based co
 
 ## Roadmap
 
-- First hosted CI run and reviewed public-source publication.
 - Future game communities and Looking for Group under separate scope.
 - Production hardening, monitoring, backup/restore and load testing before deployment.
 

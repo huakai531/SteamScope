@@ -1,0 +1,16 @@
+**/.env
+**/.env.*
+!**/.env.example
+**/.venv
+**/node_modules
+**/.next
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/*.log
+**/*.tsbuildinfo
+.validation
+**/tests
+**/test-results
+**/playwright-report

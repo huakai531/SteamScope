@@ -1,0 +1,661 @@
+/* Discover V3: at 1440px, 224px rail + 2×48px gutters + 1120px canvas.
+   A pair is 2×548px + 24px; a single recommendation uses the whole canvas. */
+.app-shell .game-art.game-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  flex: 0 0 44px;
+  border-radius: 7px;
+}
+.app-shell .comparison-game-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.app-shell .discover-v3 {
+  --discover-ink: #edf0f7;
+  --discover-muted: #a8b0bf;
+}
+.app-shell .discover-v3 .page-tools {
+  margin-bottom: 18px;
+}
+.app-shell .discover-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 0 0 28px;
+}
+.app-shell .discover-hero h1 {
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -1.2px;
+  margin: 0 0 12px;
+}
+.app-shell .discover-hero p {
+  font-size: 16px;
+  color: #b7becc;
+  margin: 0;
+}
+.app-shell .discover-own-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--discover-ink);
+  text-decoration: none;
+  padding: 12px 0 12px 24px;
+}
+.app-shell .discover-own-profile .avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  font-size: 21px;
+}
+.app-shell .discover-own-profile > span:not(.avatar-placeholder) {
+  display: grid;
+  gap: 5px;
+}
+.app-shell .discover-own-profile small {
+  font-size: 12px;
+  color: var(--discover-muted);
+}
+.app-shell .discover-own-profile strong {
+  font-size: 15px;
+  max-width: 190px;
+  overflow-wrap: anywhere;
+}
+.app-shell .discover-own-profile > svg {
+  transform: rotate(135deg);
+  width: 16px;
+}
+.app-shell .discover-search-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.app-shell .discover-v3 .social-search {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+  min-height: 54px;
+  padding: 6px 8px 6px 18px;
+  border: 0;
+  background: #1a1d23;
+  border-radius: 10px;
+  gap: 12px;
+}
+.app-shell .discover-v3 .social-search:focus-within {
+  outline: 2px solid #91adff;
+  outline-offset: 3px;
+}
+.app-shell .discover-v3 .social-search input {
+  font-size: 14px;
+}
+.app-shell .discover-v3 .social-search button {
+  padding: 10px 16px;
+  background: #2c3445;
+  white-space: nowrap;
+  font-size: 14px;
+}
+.app-shell .discover-preferences {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--discover-muted);
+  text-decoration: none;
+  font-size: 13px;
+}
+.app-shell .discover-preferences svg {
+  width: 18px;
+}
+.app-shell .discover-section {
+  margin: 0 0 28px;
+}
+.app-shell .discover-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.app-shell .discover-section h2,
+.app-shell .discover-friends h2 {
+  font-size: 22px;
+  letter-spacing: -0.45px;
+  line-height: 1.2;
+  margin: 0;
+}
+.app-shell .discover-section > h2 {
+  margin-bottom: 18px;
+}
+.app-shell .discover-section-heading > span {
+  font-size: 13px;
+  color: #929cac;
+}
+.app-shell .discover-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.app-shell .discover-grid-single {
+  grid-template-columns: 1fr;
+}
+.app-shell .discover-grid-many .featured-player {
+  grid-column: 1 / -1;
+}
+.app-shell .discover-v3 .discover-player-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 0;
+  border-radius: 14px;
+  background: #1c2029;
+  min-width: 0;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+.app-shell .discover-v3 .discover-player-card:hover {
+  transform: translateY(-2px);
+  background: #202530;
+}
+.app-shell .discover-v3 .featured-player {
+  padding: 30px 32px 24px;
+  background: #1e2430;
+}
+.app-shell .discover-player-body {
+  display: grid;
+  gap: 24px;
+}
+.app-shell .featured-player .discover-player-body {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 48px;
+}
+.app-shell .discover-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--discover-ink);
+  text-decoration: none;
+}
+.app-shell .discover-identity .avatar-placeholder {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  font-size: 27px;
+  background: #34445e;
+  color: #d8e5ff;
+}
+.app-shell .discover-v3 .avatar-placeholder[data-avatar="1"] {
+  background: #404654;
+  color: #e4dfed;
+}
+.app-shell .discover-v3 .avatar-placeholder[data-avatar="2"] {
+  background: #45404b;
+  color: #e8dbe4;
+}
+.app-shell .discover-v3 .avatar-placeholder[data-avatar="3"] {
+  background: #35494b;
+  color: #d9e5e7;
+}
+.app-shell .featured-player .discover-identity .avatar-placeholder {
+  flex-basis: 80px;
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
+  border-radius: 24px;
+}
+.app-shell .discover-identity h3 {
+  font-size: 20px;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+.app-shell .featured-player .discover-identity h3 {
+  font-size: 26px;
+}
+.app-shell .discover-handle {
+  font-size: 13px;
+  color: #a2aec2;
+  overflow-wrap: anywhere;
+}
+.app-shell .discover-v3 .discover-bio {
+  color: #b9c1cf;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 20px 0 18px;
+  max-width: 44ch;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-shell .discover-signals {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: #bccaf0;
+}
+.app-shell .discover-signals > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.app-shell .discover-signals strong {
+  color: #dce5ff;
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.app-shell .discover-signals svg {
+  width: 17px;
+  height: 17px;
+}
+.app-shell .discover-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+.app-shell .discover-reasons li {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 7px 9px;
+  border-radius: 5px;
+  background: #292f3c;
+  color: #c0cadb;
+  font-size: 12px;
+  line-height: 1.4;
+  transition: background-color 160ms ease;
+}
+.app-shell .discover-reasons li:hover {
+  background: #323b4d;
+}
+.app-shell .discover-reasons svg {
+  flex: 0 0 14px;
+  width: 14px;
+  height: 16px;
+  color: #8fa8dc;
+}
+.app-shell .mutual-games {
+  min-width: 0;
+  padding: 0;
+}
+.app-shell .featured-player .mutual-games {
+  padding: 4px 0 0 24px;
+}
+.app-shell .mutual-games-label {
+  font-size: 14px;
+  color: #d8deea;
+  font-weight: 500;
+}
+.app-shell .mutual-games ul {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 10px;
+  padding: 0;
+}
+.app-shell .mutual-games li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  color: #e1e6f0;
+  font-size: 14px;
+}
+.app-shell .mutual-games li > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-shell .discover-v3 .game-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  flex: 0 0 44px;
+  border-radius: 7px;
+  background: #35465a;
+  color: #c3d5ef;
+}
+.app-shell .discover-v3 .game-icon[data-art="1"] {
+  background: #493c43;
+  color: #e4c4ce;
+}
+.app-shell .discover-v3 .game-icon[data-art="2"] {
+  background: #3b414e;
+  color: #c8cfe5;
+}
+.app-shell .discover-v3 .game-icon[data-art="3"] {
+  background: #394b48;
+  color: #bed6d1;
+}
+.app-shell .discover-v3 .game-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.app-shell .mutual-more {
+  display: block;
+  color: #94a1b8;
+  font-size: 12px;
+  margin-left: 56px;
+}
+.app-shell .discover-card-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 26px;
+}
+.app-shell .discover-card-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.app-shell .discover-v3 .discover-card-actions .primary-action {
+  padding: 11px 16px;
+  min-height: 42px;
+  font-size: 14px;
+  background: #91adff;
+  color: #101625;
+  text-decoration: none;
+  display: inline-flex;
+  gap: 22px;
+  align-items: center;
+}
+.app-shell .discover-card-actions .social-actions {
+  margin: 0;
+}
+.app-shell .discover-card-actions .social-buttons {
+  margin: 0;
+  gap: 10px;
+}
+.app-shell .discover-card-actions .social-buttons button {
+  min-height: 42px;
+  background: #30394b;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+.app-shell .discover-card-actions .social-buttons a {
+  font-size: 14px;
+}
+.app-shell .discover-card-actions .social-buttons .primary-action {
+  background: #30394b;
+  color: #d8e2f5;
+}
+.app-shell .discover-card-footer .help-disclosure {
+  font-size: 12px;
+  margin: 12px 0 0;
+}
+.app-shell .discover-card-footer .help-disclosure[open] {
+  flex-basis: 100%;
+}
+.app-shell .discover-friends {
+  padding: 22px 0 14px;
+}
+.app-shell .discover-friends-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.app-shell .discover-friends h2 {
+  font-size: 18px;
+}
+.app-shell .discover-friends-title svg {
+  color: #a6b3cc;
+}
+.app-shell .discover-friends > p {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: #9ca7b9;
+  font-size: 13px;
+  margin: 0;
+  padding-left: 32px;
+}
+.app-shell .discover-friends > p a {
+  color: #b6c9ff;
+  text-decoration: none;
+}
+.app-shell .discover-empty {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  background: #191d24;
+  padding: 40px 32px;
+  border-radius: 12px;
+}
+.app-shell .discover-empty > svg {
+  width: 36px;
+  height: 36px;
+  color: #91adff;
+}
+.app-shell .discover-empty h3 {
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+.app-shell .discover-empty p {
+  color: #aeb7c8;
+  font-size: 14px;
+  margin: 0;
+}
+.app-shell .discover-empty > a {
+  font-size: 14px;
+  color: #c3d0f5;
+  text-decoration: none;
+}
+.app-shell .discover-empty-search {
+  background: transparent;
+  padding: 16px 0 24px;
+}
+.app-shell .discover-v3 > .help-disclosure {
+  margin-top: 14px;
+}
+@media (max-width: 1100px) {
+  .app-shell .discover-own-profile {
+    display: none;
+  }
+  .app-shell .featured-player .discover-player-body {
+    gap: 24px;
+  }
+  .app-shell .featured-player .mutual-games {
+    padding-left: 0;
+  }
+  .app-shell .discover-section-heading > span {
+    display: none;
+  }
+  .app-shell .discover-empty {
+    grid-template-columns: 40px 1fr;
+  }
+  .app-shell .discover-empty > a {
+    grid-column: 2;
+  }
+}
+@media (max-width: 760px) {
+  .app-shell .discover-hero h1 {
+    font-size: 32px;
+  }
+  .app-shell .discover-hero p {
+    font-size: 14px;
+    max-width: 30ch;
+    line-height: 1.6;
+  }
+  .app-shell .discover-hero {
+    margin-bottom: 22px;
+  }
+  .app-shell .discover-search-row {
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .app-shell .discover-v3 .social-search {
+    flex-basis: 100%;
+    padding-left: 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .app-shell .discover-v3 .social-search input {
+    min-width: 110px;
+    font-size: 13px;
+  }
+  .app-shell .discover-v3 .social-search button {
+    font-size: 12px;
+    padding: 10px;
+  }
+  .app-shell .discover-preferences {
+    margin-left: auto;
+  }
+  .app-shell .discover-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .app-shell .discover-v3 .discover-player-card {
+    padding: 22px;
+  }
+  .app-shell .featured-player .discover-player-body {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .app-shell .featured-player .discover-identity .avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+    border-radius: 20px;
+  }
+  .app-shell .featured-player .discover-identity h3 {
+    font-size: 22px;
+  }
+  .app-shell .discover-identity {
+    gap: 12px;
+  }
+  .app-shell .discover-identity h3 {
+    font-size: 20px;
+  }
+  .app-shell .discover-section h2 {
+    font-size: 21px;
+  }
+  .app-shell .discover-bio {
+    margin-top: 16px;
+  }
+  .app-shell .discover-card-footer {
+    gap: 8px;
+  }
+  .app-shell .discover-card-actions {
+    gap: 10px;
+  }
+  .app-shell .discover-card-actions .primary-action {
+    gap: 10px;
+  }
+  .app-shell .discover-empty {
+    padding: 28px 20px;
+    gap: 18px;
+    grid-template-columns: 1fr;
+  }
+  .app-shell .discover-empty > a {
+    grid-column: auto;
+  }
+  .app-shell .discover-empty h3 {
+    font-size: 22px;
+    line-height: 1.3;
+  }
+  .app-shell .discover-friends h2 {
+    font-size: 17px;
+  }
+  .app-shell .discover-friends > p {
+    padding-left: 0;
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .discover-v3 .discover-player-card,
+  .app-shell .discover-reasons li {
+    transition: none;
+  }
+  .app-shell .discover-v3 .discover-player-card:hover {
+    transform: none;
+  }
+}
+
+.app-shell .discover-utilities {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.app-shell .discover-utilities .discover-reload {
+  background: transparent;
+  padding: 8px 0;
+  min-height: 36px;
+  font-size: 12px;
+  color: #9eacc3;
+  white-space: nowrap;
+}
+.app-shell .discover-card-footer {
+  width: 100%;
+  max-width: none;
+  border: 0;
+  margin: auto 0 0;
+  padding: 24px 0 0;
+}
+.app-shell .discover-player-card:not(.featured-player) .mutual-games ul {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.app-shell .discover-player-card:not(.featured-player) .mutual-games li {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+}
+.app-shell
+  .discover-player-card:not(.featured-player)
+  .mutual-games
+  li
+  > span:last-child {
+  max-width: 100%;
+}
+@media (max-width: 1100px) {
+  .app-shell .discover-search-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .app-shell .discover-v3 .social-search {
+    flex-basis: 100%;
+  }
+  .app-shell .discover-utilities {
+    margin-left: auto;
+  }
+}
+@media (max-width: 760px) {
+  .app-shell .discover-hero {
+    margin-bottom: 20px;
+  }
+  .app-shell .featured-player .mutual-games ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .app-shell .featured-player .mutual-games li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .app-shell .featured-player .mutual-games li > span:last-child {
+    max-width: 100%;
+  }
+}

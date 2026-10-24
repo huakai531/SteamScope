@@ -1,0 +1,790 @@
+/* Final product polish: app-only refinements to the accepted A+B foundation. */
+.app-shell .discover-v3 .page-tools {
+  margin-bottom: 12px;
+}
+.app-shell .discover-hero {
+  margin-bottom: 22px;
+}
+.app-shell .discover-hero h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.app-shell .discover-search-row {
+  margin-bottom: 24px;
+}
+.app-shell .discover-section {
+  margin-bottom: 20px;
+}
+.app-shell .discover-section-heading {
+  margin-bottom: 14px;
+}
+.app-shell .discover-section h2 {
+  font-size: 20px;
+}
+.app-shell .discover-grid {
+  gap: 20px;
+  align-items: start;
+}
+.app-shell .discover-grid-single {
+  max-width: 760px;
+}
+.app-shell .discover-grid-many .featured-player {
+  grid-column: auto;
+}
+.app-shell .discover-v3 .discover-player-card {
+  padding: 20px 24px;
+  border-radius: 12px;
+  background: var(--panel);
+}
+.app-shell .discover-v3 .discover-player-card:hover {
+  transform: none;
+  background: #1c2027;
+}
+.app-shell .discover-player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.app-shell .discover-identity {
+  gap: 12px;
+  min-width: 0;
+}
+.app-shell .discover-identity .avatar-placeholder,
+.app-shell .featured-player .discover-identity .avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  flex-basis: 56px;
+  border-radius: 50%;
+  font-size: 22px;
+}
+.app-shell .discover-identity h3,
+.app-shell .featured-player .discover-identity h3 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.app-shell .discover-connection-action {
+  flex-shrink: 0;
+  max-width: 50%;
+}
+.app-shell .discover-connection-action .social-actions,
+.app-shell .discover-connection-action .social-buttons {
+  margin: 0;
+}
+.app-shell .discover-connection-action .social-buttons {
+  gap: 8px;
+  justify-content: flex-end;
+}
+.app-shell
+  .discover-connection-action
+  .social-buttons
+  > button:not(.more-actions-trigger) {
+  min-height: 36px;
+  padding: 8px 14px;
+  background: var(--accent);
+  color: #101625;
+}
+.app-shell .discover-v3 .discover-bio {
+  max-width: 65ch;
+  margin: 10px 0;
+  line-height: 1.5;
+}
+.app-shell .mutual-games,
+.app-shell .featured-player .mutual-games {
+  padding: 0;
+}
+.app-shell .mutual-games-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.app-shell .mutual-games ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 8px 0 0;
+}
+.app-shell .mutual-games li {
+  font-size: 13px;
+}
+.app-shell .mutual-games .game-chip {
+  gap: 8px;
+}
+.app-shell .discover-v3 .mutual-games .game-icon {
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  flex-basis: 36px;
+}
+.app-shell .mutual-more {
+  margin: 8px 0 0;
+}
+.app-shell .discover-reasons {
+  gap: 6px;
+  margin-top: 12px;
+}
+.app-shell .discover-reasons li {
+  padding: 4px 7px;
+  background: var(--surface);
+  font-size: 12px;
+}
+.app-shell .discover-card-footer {
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  align-items: center;
+}
+.app-shell .discover-profile-link {
+  font-size: 13px;
+  color: #c3d0f5;
+  text-decoration: none;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 28px;
+}
+.app-shell .discover-profile-link:hover {
+  text-decoration: underline;
+}
+.app-shell .discover-card-footer .help-disclosure {
+  margin: 0;
+}
+.app-shell .discover-friends {
+  padding: 12px 0;
+}
+.app-shell .discover-friends-title {
+  margin-bottom: 8px;
+}
+.app-shell .discover-empty {
+  padding: 24px;
+  gap: 16px;
+}
+.app-shell .discover-empty h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+/* The player and their games lead; counts are a compact, secondary summary. */
+.app-shell .player-layout[data-view="overview"] .player-identity {
+  gap: 20px;
+  padding-top: 8px;
+}
+.app-shell .player-layout[data-view="overview"] .player-bio {
+  max-width: 72ch;
+}
+.app-shell
+  .player-layout[data-view="overview"]
+  .player-identity
+  > .avatar-large {
+  width: 84px;
+  height: 84px;
+  flex-basis: 84px;
+  font-size: 30px;
+}
+.app-shell .player-layout[data-view="overview"] .profile-heading h1 {
+  font-size: 32px;
+}
+.app-shell .player-layout[data-view="overview"] .player-steam {
+  font-size: 12px;
+  margin-top: 12px;
+}
+.app-shell .player-layout[data-view="overview"] .profile-actions {
+  align-self: start;
+}
+.app-shell .gaming-identity-card {
+  padding: 20px 24px;
+  background: var(--panel);
+  border-radius: 12px;
+}
+.app-shell .gaming-card-heading {
+  align-items: start;
+  margin-bottom: 20px;
+}
+.app-shell .gaming-card-heading h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+.app-shell .gaming-card-heading .player-source {
+  margin-top: 8px;
+}
+.app-shell .gaming-card-link {
+  font-size: 13px;
+}
+.app-shell .identity-games {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.app-shell .identity-games > a {
+  color: var(--text);
+  text-decoration: none;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.app-shell .identity-games .game-art {
+  width: 100%;
+  height: 112px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.app-shell .identity-games strong {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.app-shell .identity-games > a > span:not(.game-art) {
+  color: var(--muted);
+  font-size: 12px;
+}
+.app-shell .identity-games > a:hover strong {
+  color: var(--accent);
+}
+.app-shell .gaming-identity-card .player-stats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px 36px;
+  margin: 24px 0 0;
+}
+.app-shell .gaming-identity-card .player-stat,
+.app-shell .gaming-identity-card .player-stat:last-child {
+  flex: none;
+  width: auto;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 4px;
+}
+.app-shell .gaming-identity-card .player-stat dd,
+.app-shell .gaming-identity-card .player-stat:first-child dd,
+.app-shell .gaming-identity-card .player-stat:last-child dd {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.app-shell .gaming-identity-card .player-stat dt {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: none;
+}
+.app-shell .gaming-identity-card .stat-emphasis small {
+  font-size: 15px;
+}
+.app-shell .gaming-identity-card .stat-detail {
+  display: inline;
+  font-size: 12px;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 400;
+}
+.app-shell .gaming-identity-card > .help-disclosure {
+  margin: 16px 0 0;
+}
+.app-shell .player-game-list li {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 12px;
+  padding: 12px 0;
+}
+.app-shell .player-layout[data-view="overview"] .player-columns > .player-card {
+  padding: 12px 0;
+}
+.app-shell .player-game-list .game-art.game-icon {
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  flex-basis: 48px;
+}
+.app-shell .player-game-list li > span:not(.game-art) {
+  font-size: 12px;
+  text-align: right;
+}
+
+/* A full-height messenger. Only an interrupted connection needs a banner. */
+.app-shell .app-content main.messages-main {
+  height: 100dvh;
+  min-height: 500px;
+  max-width: none;
+  padding: 20px 24px;
+}
+.app-shell .messages-main > h1 {
+  font-size: 22px;
+  letter-spacing: -0.4px;
+  margin: 0 0 18px;
+  line-height: 30px;
+}
+.app-shell .chat-start {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  margin: 0;
+  z-index: 2;
+}
+.app-shell .chat-start[open] {
+  width: min(400px, calc(100% - 48px));
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px #0005;
+  top: 16px;
+}
+.app-shell .chat-start summary {
+  min-height: 24px;
+}
+.app-shell .chat-start-form {
+  padding-bottom: 0;
+}
+.app-shell .chat-connection {
+  position: static;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: var(--surface);
+  border-radius: 6px;
+}
+.app-shell .chat-layout {
+  grid-template-columns: 310px minmax(0, 1fr);
+  border-radius: 8px;
+}
+.app-shell .chat-layout > aside {
+  padding: 20px 10px;
+  background: var(--panel);
+}
+.app-shell .chat-layout > aside h2 {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.app-shell .chat-conversation {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  padding: 14px 10px;
+}
+.app-shell .chat-conversation[aria-pressed="true"] {
+  background: #282e3a;
+}
+.app-shell .conversation-avatar {
+  grid-column: 1;
+  grid-row: 1/3;
+  position: relative;
+}
+.app-shell .chat-conversation .avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  font-size: 19px;
+}
+.app-shell .chat-conversation .conversation-preview {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  font-size: 13px;
+  color: var(--muted);
+  padding-right: 24px;
+}
+.app-shell .chat-conversation .conversation-time {
+  grid-column: 3;
+  grid-row: 1;
+  font-size: 11px;
+  color: var(--muted);
+}
+.app-shell .chat-conversation .unread-count {
+  grid-column: 3;
+  grid-row: 2;
+  align-self: center;
+  min-width: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+.app-shell .person-online-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  background: #9dd6b3;
+  right: 0;
+  bottom: 0;
+}
+.app-shell .chat-pane {
+  background: #17191e;
+}
+.app-shell .conversation-header {
+  padding: 18px 24px;
+  gap: 12px;
+}
+.app-shell .conversation-header > div {
+  min-width: 0;
+}
+.app-shell .conversation-header h2 {
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.app-shell .conversation-header > .more-actions-trigger {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.app-shell .conversation-presence [data-online="true"] {
+  color: #a8d5ba;
+}
+.app-shell .chat-history {
+  padding: 24px 44px 16px;
+  gap: 4px;
+}
+.app-shell .chat-history > li {
+  flex-shrink: 0;
+  max-width: 62%;
+}
+.app-shell .chat-history > li:first-child {
+  margin-top: auto;
+}
+.app-shell .chat-history > li[data-group-start="true"] {
+  margin-top: 16px;
+}
+.app-shell .chat-history > li.chat-day {
+  align-self: center;
+  max-width: 100%;
+  background: transparent;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 12px 0;
+}
+.app-shell .chat-body {
+  padding: 10px 14px;
+  background: #262a32;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.app-shell .chat-mine .chat-body {
+  background: #2a3851;
+}
+.app-shell .chat-history small {
+  margin-top: 4px;
+  font-size: 11px;
+}
+.app-shell .chat-composer {
+  display: block;
+  padding: 12px 24px 18px;
+  background: transparent;
+}
+.app-shell .composer-surface {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+  padding: 6px;
+  border-radius: 10px;
+  background: var(--surface);
+}
+.app-shell .composer-surface:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.app-shell .chat-composer .composer-surface textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  max-height: 140px;
+  border: 0;
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+}
+.app-shell .chat-composer .composer-send {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  min-width: 40px;
+  background: var(--accent);
+  color: #101625;
+}
+.app-shell .composer-send svg {
+  transform: rotate(90deg);
+}
+.app-shell .chat-composer .composer-help {
+  margin: 8px 6px 0;
+  font-size: 11px;
+}
+.app-shell .chat-pane > .chat-typing {
+  margin: 4px 0;
+  min-height: 18px;
+}
+.app-shell .chat-report {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+  .app-shell .chat-layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+  .app-shell .chat-history {
+    padding-inline: 36px;
+  }
+  .app-shell .identity-games .game-art {
+    height: 90px;
+  }
+  .app-shell .discover-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
+  }
+}
+@media (max-width: 760px) {
+  .app-shell .discover-hero h1 {
+    font-size: 28px;
+  }
+  .app-shell .discover-v3 .discover-player-card {
+    padding: 20px;
+  }
+  .app-shell .discover-identity h3,
+  .app-shell .featured-player .discover-identity h3 {
+    font-size: 20px;
+  }
+  .app-shell .discover-player-header {
+    gap: 8px;
+  }
+  .app-shell .discover-connection-action {
+    max-width: 45%;
+  }
+  .app-shell .discover-connection-action .social-buttons {
+    gap: 4px;
+  }
+  .app-shell .discover-v3 .discover-bio {
+    margin: 14px 0;
+  }
+  .app-shell .mutual-games ul {
+    gap: 10px 16px;
+  }
+  .app-shell .identity-games {
+    gap: 12px;
+  }
+  .app-shell .gaming-identity-card .player-stats {
+    gap: 18px 24px;
+  }
+  .app-shell .chat-layout {
+    grid-template-columns: 230px minmax(0, 1fr);
+  }
+  .app-shell .chat-conversation {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+  .app-shell .chat-conversation .conversation-time {
+    display: none;
+  }
+  .app-shell .conversation-header {
+    display: flex;
+  }
+}
+/* Switch to the existing list/conversation navigation before two panes squeeze
+   the reading column. The desktop rail can stay at tablet widths. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .app-shell .chat-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .app-shell .chat-layout[data-selected="true"] > aside {
+    display: none;
+  }
+  .app-shell .chat-layout[data-selected="false"] > .chat-pane {
+    display: none;
+  }
+  .app-shell .mobile-conversation-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    padding: 0;
+  }
+  .app-shell .conversation-header {
+    display: flex;
+  }
+  .app-shell .conversation-header .avatar-placeholder {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+  }
+  .app-shell .chat-conversation {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+  }
+  .app-shell .chat-conversation .conversation-time {
+    display: block;
+  }
+}
+@media (max-width: 600px) {
+  .app-shell .discover-v3 .discover-player-card {
+    padding: 18px;
+  }
+  .app-shell .discover-identity .avatar-placeholder,
+  .app-shell .featured-player .discover-identity .avatar-placeholder {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+  .app-shell .discover-identity {
+    gap: 10px;
+  }
+  .app-shell .discover-identity h3,
+  .app-shell .featured-player .discover-identity h3 {
+    font-size: 18px;
+  }
+  .app-shell .discover-handle {
+    font-size: 12px;
+  }
+  .app-shell
+    .discover-connection-action
+    .social-buttons
+    > button:not(.more-actions-trigger) {
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .app-shell .discover-connection-action .more-actions-trigger {
+    width: 28px;
+    min-width: 28px;
+  }
+  .app-shell .mutual-games ul {
+    gap: 12px;
+  }
+  .app-shell .mutual-games li {
+    font-size: 12px;
+  }
+  .app-shell .discover-v3 .discover-bio {
+    max-width: none;
+  }
+  .app-shell .discover-card-footer {
+    padding-top: 14px;
+  }
+  .app-shell
+    .player-layout[data-view="overview"]
+    .player-identity
+    > .avatar-large {
+    width: 72px;
+    height: 72px;
+    flex-basis: 72px;
+    font-size: 26px;
+  }
+  .app-shell .player-layout[data-view="overview"] .player-identity {
+    gap: 16px;
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+  .app-shell .player-layout[data-view="overview"] .profile-heading h1 {
+    font-size: 28px;
+  }
+  .app-shell .gaming-identity-card {
+    padding: 20px;
+  }
+  .app-shell .gaming-card-heading {
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .app-shell .gaming-card-heading h2 {
+    font-size: 18px;
+  }
+  .app-shell .gaming-card-link {
+    max-width: 90px;
+    line-height: 1.6;
+  }
+  .app-shell .identity-games {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .app-shell .identity-games > a {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 2px;
+    align-items: center;
+  }
+  .app-shell .identity-games .game-art {
+    grid-row: 1/3;
+    width: 64px;
+    height: 56px;
+    margin: 0;
+  }
+  .app-shell .identity-games strong {
+    font-size: 14px;
+    align-self: end;
+  }
+  .app-shell .identity-games > a > span:not(.game-art) {
+    align-self: start;
+  }
+  .app-shell .gaming-identity-card .player-stat dt {
+    font-size: 12px;
+  }
+  .app-shell .gaming-identity-card .player-stat dd {
+    font-size: 22px;
+  }
+  .app-shell .player-game-list li {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 4px 12px;
+  }
+  .app-shell .player-game-list .game-art {
+    grid-row: 1/3;
+  }
+  .app-shell .player-game-list li > span:not(.game-art) {
+    grid-column: 2;
+    text-align: left;
+  }
+  .app-shell .app-content main.messages-main {
+    height: calc(100dvh - 132px);
+    min-height: 360px;
+    padding: 12px 0 0;
+  }
+  .app-shell .messages-main > h1 {
+    font-size: 20px;
+    margin: 0 16px 12px;
+  }
+  .app-shell .chat-start {
+    top: 16px;
+    right: 16px;
+    margin: 0;
+    font-size: 12px;
+  }
+  .app-shell .chat-start[open] {
+    width: calc(100% - 32px);
+    top: 8px;
+  }
+  .app-shell .chat-layout {
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 0;
+  }
+  .app-shell .chat-conversation {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+  }
+  .app-shell .chat-conversation .conversation-time {
+    display: block;
+  }
+  .app-shell .conversation-header {
+    padding: 12px;
+    gap: 10px;
+  }
+  .app-shell .conversation-header h2 {
+    font-size: 15px;
+  }
+  .app-shell .conversation-header .avatar-placeholder {
+    width: 36px;
+    height: 36px;
+  }
+  .app-shell .conversation-header > .more-actions-trigger {
+    width: 32px;
+  }
+  .app-shell .chat-history {
+    padding: 16px 36px 12px;
+  }
+  .app-shell .chat-history > li {
+    max-width: 82%;
+  }
+  .app-shell .chat-body {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+  .app-shell .chat-composer {
+    padding: 10px 12px 12px;
+  }
+  .app-shell .chat-composer .composer-surface textarea {
+    font-size: 16px;
+  }
+}

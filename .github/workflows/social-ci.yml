@@ -1,0 +1,167 @@
+name: SteamScope local MVP validation
+on:
+  push:
+    paths: ['social/**', '.github/workflows/social-ci.yml']
+  pull_request:
+    paths: ['social/**', '.github/workflows/social-ci.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backend:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: social/backend
+    services:
+      postgres:
+        image: postgres:17.11
+        env:
+          POSTGRES_USER: steamscope_social
+          POSTGRES_PASSWORD: ci_only_not_a_secret
+          POSTGRES_DB: steamscope_social_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U steamscope_social -d steamscope_social_test"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+      redis:
+        image: redis:7.4.2-alpine
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 12
+    env:
+      SOCIAL_ENVIRONMENT: test
+      SOCIAL_DATABASE_URL: postgresql+asyncpg://steamscope_social:ci_only_not_a_secret@127.0.0.1:5432/steamscope_social_test
+      SOCIAL_REDIS_URL: redis://127.0.0.1:6379/1
+      SOCIAL_INTEGRATION: '1'
+      SOCIAL_STEAM_API_KEY: ''
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: '0.13.5'
+          python-version: '3.12.14'
+      - run: uv sync --frozen
+      - run: uv run --frozen ruff check .
+      - run: uv run --frozen ruff format --check .
+      - run: pwsh -NoProfile -File ../scripts/test_dev_script.ps1
+      - run: uv run --frozen mypy src
+      - run: uv run --frozen alembic upgrade head
+      - run: uv run --frozen pytest -q
+      - run: uv run --frozen python -m steamscope_social.worker --check
+      - run: uv run --frozen python -m steamscope_social.export_openapi
+      - run: git diff --exit-code -- ../docs/api/openapi.json
+      - run: uv run --frozen python ../scripts/check_repository.py
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: social/frontend
+    services:
+      postgres:
+        image: postgres:17.11
+        env:
+          POSTGRES_USER: steamscope_social
+          POSTGRES_PASSWORD: ci_only_not_a_secret
+          POSTGRES_DB: steamscope_social_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U steamscope_social -d steamscope_social_test"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+      redis:
+        image: redis:7.4.2-alpine
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 12
+    env:
+      SOCIAL_ENVIRONMENT: test
+      SOCIAL_DATABASE_URL: postgresql+asyncpg://steamscope_social:ci_only_not_a_secret@127.0.0.1:5432/steamscope_social_test
+      SOCIAL_REDIS_URL: redis://127.0.0.1:6379/1
+      SOCIAL_INTEGRATION: '1'
+      SOCIAL_STEAM_API_KEY: ''
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.19.0'
+          cache: npm
+          cache-dependency-path: social/frontend/package-lock.json
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: '0.13.5'
+          python-version: '3.12.14'
+      - run: uv sync --frozen --project ../backend
+      - run: uv run --frozen alembic upgrade head
+        working-directory: social/backend
+      - run: npm ci --ignore-scripts
+      - run: npm run api:types
+      - run: git diff --exit-code -- src/lib/api/schema.d.ts
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      # Includes the real client -> mapper -> PostgreSQL queue -> owner UI fixture pipeline.
+      - run: npm run test:e2e:auth
+      - if: always()
+        run: uv run --frozen --project ../backend python ../backend/tests/browser_cleanup.py
+  compose:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: social
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - run: cp .env.example .env
+      - run: docker compose --env-file .env config --quiet
+      - run: docker compose --env-file .env up --build --wait --wait-timeout 180
+      - run: curl --fail http://127.0.0.1:8100/health/live && curl --fail http://127.0.0.1:8100/health/ready && curl --fail http://127.0.0.1:3100/api/status
+      - run: docker compose exec -T api alembic upgrade head
+      - run: docker compose exec -T api alembic check
+      - run: docker compose exec -T worker python -m steamscope_social.worker --check
+      - run: test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3100/api/v1/me)" = 401
+      - if: always()
+        run: docker compose --env-file .env logs --tail=80
+      - if: always()
+        run: docker compose --env-file .env down
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: social/frontend
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.19.0'
+      - run: npm ci --ignore-scripts
+      - id: full
+        run: npm audit --include=dev --json > dependency-audit-full.json
+        continue-on-error: true
+      - id: production
+        run: npm audit --omit=dev --json > dependency-audit-production.json
+        continue-on-error: true
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: dependency-audits
+          path: social/frontend/dependency-audit-*.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Preserve failed audit as failed, without a security exception
+        if: steps.full.outcome != 'success' || steps.production.outcome != 'success'
+        run: exit 1

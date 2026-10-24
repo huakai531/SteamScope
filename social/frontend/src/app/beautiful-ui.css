@@ -1,0 +1,580 @@
+/* Beautiful UI free source integration. SteamScope remains the theme owner.
+   Do not install the optional Notchset palette/fonts over these mappings. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--panel);
+  --card-foreground: var(--text);
+  --popover: var(--elevated);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: #101b30;
+  --secondary: var(--surface);
+  --secondary-foreground: var(--text);
+  --muted-foreground: var(--muted);
+  --accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: #454951;
+  --ring: var(--accent);
+  --radius: 8px;
+  --notchset-signal: var(--accent);
+  --notchset-signal-text: var(--danger);
+  --notchset-tint: var(--accent-surface);
+  --notchset-control-edge: #454951;
+  --notchset-rule: var(--line);
+  --notchset-fade: 160ms;
+  --notchset-ease-fade: ease-out;
+  --notchset-ease-travel: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Scope all overrides. In SteamScope --muted means text, not a grey surface. */
+[data-notchset] {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+}
+[data-slot="input"],
+[data-slot="textarea"] {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: normal;
+  background-image: none;
+  border-color: var(--input);
+  transition:
+    border-color 160ms ease,
+    outline-color 160ms ease;
+}
+[data-slot="input"]:focus,
+[data-slot="textarea"]:focus {
+  background-image: none;
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+[data-slot="input"][aria-invalid="true"],
+[data-slot="textarea"][aria-invalid="true"] {
+  border-color: var(--danger);
+}
+[data-slot="textarea"] {
+  field-sizing: content;
+  min-height: 96px;
+  max-height: 240px;
+  resize: vertical;
+}
+[data-slot="input"]:disabled,
+[data-slot="textarea"]:disabled {
+  opacity: 0.65;
+}
+
+.bui-button {
+  transition:
+    background-color 160ms ease,
+    transform 120ms ease;
+}
+.bui-button-primary {
+  background: var(--accent);
+  color: var(--primary-foreground);
+  border-color: transparent;
+}
+.bui-button-primary:hover {
+  background: #abc6ff;
+  color: var(--primary-foreground);
+}
+.bui-button-secondary {
+  background: var(--surface);
+  color: var(--text);
+}
+.bui-button-ghost {
+  background: transparent;
+  border-color: transparent;
+}
+.bui-button-danger {
+  background: #38272b;
+  color: #f1b0b3;
+  border-color: transparent;
+}
+.bui-button-danger:hover {
+  background: #4a3037;
+  color: #ffd1d3;
+}
+.bui-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.bui-button-sm {
+  min-height: 32px;
+  padding: 5px 10px;
+}
+.bui-button-icon {
+  width: 40px;
+  padding: 8px;
+}
+.bui-button:disabled {
+  opacity: 0.65;
+}
+
+.bui-avatar {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  font-weight: 650;
+}
+.bui-avatar[data-size="s"] {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+.bui-avatar[data-size="l"] {
+  width: 80px;
+  height: 80px;
+  font-size: 26px;
+}
+.bui-avatar [data-slot="avatar-image"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 160ms ease;
+}
+.game-art {
+  overflow: hidden;
+}
+.game-art > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.game-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  max-width: 100%;
+}
+.game-chip > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mutual-games li > .game-chip {
+  display: flex;
+  width: 100%;
+}
+.mutual-games .game-chip .game-icon {
+  width: 38px;
+  height: 38px;
+  flex: none;
+}
+
+.bui-overlay-positioner {
+  z-index: 100;
+  outline: none;
+}
+.bui-menu,
+.bui-select-content {
+  background: var(--elevated);
+  color: var(--text);
+  border: 1px solid #424650;
+  border-radius: 8px;
+  padding: 5px;
+  min-width: 200px;
+  max-width: calc(100vw - 24px);
+  max-height: var(--available-height);
+  box-shadow: 0 12px 32px #0006;
+  outline: none;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+.bui-menu[data-starting-style],
+.bui-menu[data-ending-style],
+.bui-select-content[data-starting-style],
+.bui-select-content[data-ending-style] {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+.bui-menu-item,
+.bui-select-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  outline: none;
+  cursor: pointer;
+}
+.bui-menu-item[data-highlighted],
+.bui-select-item[data-highlighted] {
+  background: #343944;
+  color: var(--text);
+}
+.bui-menu-item.danger-text {
+  color: #f1b0b3;
+}
+.bui-menu-item[data-disabled],
+.bui-select-item[data-disabled] {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+.more-actions-trigger {
+  width: 36px;
+  min-height: 36px;
+  padding: 7px;
+  border: 0;
+  background: transparent;
+}
+.more-actions-trigger:hover,
+.more-actions-trigger[data-popup-open] {
+  background: var(--surface);
+}
+.bui-select-trigger {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  min-height: 42px;
+  background: #121316;
+  border-color: var(--input);
+  font-weight: 400;
+  text-align: left;
+}
+.bui-select-trigger > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bui-select-content {
+  min-width: var(--anchor-width);
+}
+.bui-select-item > span:last-child {
+  margin-left: auto;
+}
+.bui-select-scroll {
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+  background: var(--elevated);
+}
+
+.bui-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: #000a;
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+.bui-dialog {
+  position: fixed;
+  z-index: 111;
+  top: 50%;
+  left: 50%;
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  transform: translate(-50%, -50%);
+  padding: 28px;
+  border-radius: 12px;
+  background: var(--elevated);
+  color: var(--text);
+  outline: none;
+  box-shadow: 0 20px 60px #0008;
+  transition:
+    opacity 160ms ease,
+    scale 160ms ease;
+}
+.bui-dialog-overlay[data-starting-style],
+.bui-dialog-overlay[data-ending-style],
+.bui-dialog[data-starting-style],
+.bui-dialog[data-ending-style] {
+  opacity: 0;
+}
+.bui-dialog[data-starting-style],
+.bui-dialog[data-ending-style] {
+  scale: 0.98;
+}
+.bui-dialog [data-slot="dialog-title"] {
+  margin: 0 0 12px;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.bui-dialog [data-slot="dialog-description"] {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.bui-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.bui-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 32px 0;
+  color: var(--text);
+}
+.bui-empty h3 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+.bui-empty-icon {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+.bui-empty-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.bui-empty-description {
+  max-width: 46ch;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+.bui-empty-description a {
+  display: block;
+  color: var(--accent);
+  margin-top: 10px;
+}
+.chat-pane > .bui-empty {
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  padding: 36px;
+}
+
+[data-slot="segmented-control"] {
+  max-width: 100%;
+  color: var(--text);
+}
+[data-slot="segmented-control-track"] {
+  border: 0;
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 3px;
+}
+[data-slot="segmented-control"] button {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: normal;
+  min-height: 36px;
+  color: var(--muted);
+  border: 0;
+  background: transparent;
+  padding: 7px 16px;
+}
+[data-slot="segmented-control"] button:hover {
+  color: var(--text);
+}
+[data-slot="segmented-control-track"] > span {
+  border-radius: 5px;
+  background: var(--accent-surface);
+}
+[data-slot="segmented-control-track"] > span span {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: normal;
+  color: var(--text);
+}
+.section-tabs:has([data-slot="segmented-control"]) {
+  border: 0;
+  padding: 0;
+}
+.settings-row .bui-select-trigger {
+  align-self: center;
+}
+
+.social-search:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.social-search [data-slot="input"] {
+  border: 0;
+  outline: none;
+  background-image: none;
+  height: 44px;
+}
+.social-search [data-slot="input"]:focus {
+  outline: none;
+}
+.discover-player-card {
+  transition: background-color 160ms ease;
+}
+.discover-player-card:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.notification-row {
+  transition: background-color 160ms ease;
+}
+.notification-row.is-unread {
+  background: #1a202b;
+}
+.notification-row.is-read {
+  background: transparent;
+}
+.notification-row .notification-event {
+  min-width: 0;
+}
+.notification-row time {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+.app-nav a {
+  transition:
+    color 140ms ease,
+    background-color 140ms ease;
+}
+
+.chat-history {
+  overscroll-behavior: contain;
+  overflow-anchor: none;
+  scrollbar-color: #444954 transparent;
+  scrollbar-width: thin;
+}
+.chat-history li {
+  position: relative;
+}
+.chat-history .more-actions-trigger {
+  position: absolute;
+  top: 5px;
+  right: -40px;
+}
+.chat-history .chat-mine .more-actions-trigger {
+  right: auto;
+  left: -40px;
+}
+.chat-composer [data-slot="textarea"] {
+  min-height: 46px;
+  max-height: 156px;
+  field-sizing: content;
+  padding: 12px 14px;
+}
+.chat-composer .bui-button {
+  align-self: end;
+}
+.chat-jump {
+  align-self: center;
+  margin: 0 0 12px;
+  font-size: 12px;
+  min-height: 30px;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+}
+.chat-typing {
+  min-height: 24px;
+  padding: 0 24px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.chat-reconnecting {
+  margin: auto;
+  max-width: 44ch;
+  padding: 32px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Landing keeps V4 geometry, images, motion and full-navigation Steam CTA. */
+.landing-entry {
+  transition:
+    background-color 160ms ease,
+    transform 120ms ease;
+}
+.landing-entry:active {
+  transform: translateY(1px);
+}
+.landing-entry:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+@media (max-width: 600px) {
+  [data-slot="input"],
+  [data-slot="textarea"],
+  .bui-select-trigger {
+    font-size: 16px;
+  }
+  .bui-menu-item,
+  .bui-select-item {
+    min-height: 44px;
+  }
+  .bui-dialog {
+    padding: 22px;
+  }
+  .bui-dialog-actions {
+    flex-direction: column-reverse;
+  }
+  .bui-dialog-actions > button {
+    width: 100%;
+  }
+  .bui-avatar[data-size="l"] {
+    width: 64px;
+    height: 64px;
+    font-size: 22px;
+  }
+  .chat-history .more-actions-trigger {
+    right: -34px;
+    width: 32px;
+  }
+  .chat-history .chat-mine .more-actions-trigger {
+    left: -34px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-notchset],
+  [data-notchset] *,
+  .bui-dialog-overlay,
+  .bui-dialog,
+  .bui-menu,
+  .bui-select-content,
+  .landing-entry,
+  .app-nav a,
+  .discover-player-card,
+  .notification-row {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (forced-colors: active) {
+  [data-notchset]:focus-visible {
+    outline: 2px solid Highlight;
+  }
+  [data-slot="segmented-control"] [aria-checked="true"] {
+    outline: 2px solid Highlight;
+  }
+}

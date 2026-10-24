@@ -1,0 +1,107 @@
+name: ${COMPOSE_PROJECT_NAME:-steamscope-social-dev}
+
+x-backend: &backend
+  image: steamscope-social-backend:phase6
+  build:
+    context: .
+    dockerfile: infra/backend.Dockerfile
+  environment: &backend-env
+    SOCIAL_ENVIRONMENT: development
+    SOCIAL_DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-steamscope_social}:${POSTGRES_PASSWORD:?Set local POSTGRES_PASSWORD}@postgres:5432/steamscope_social_dev
+    SOCIAL_REDIS_URL: redis://redis:6379/0
+    SOCIAL_CORS_ORIGINS: '${SOCIAL_CORS_ORIGINS:-["http://localhost:3100","http://127.0.0.1:3100"]}'
+    SOCIAL_DEPENDENCY_TIMEOUT_SECONDS: ${SOCIAL_DEPENDENCY_TIMEOUT_SECONDS:-2}
+    SOCIAL_WORKER_CHECK_INTERVAL_SECONDS: ${SOCIAL_WORKER_CHECK_INTERVAL_SECONDS:-10}
+    SOCIAL_BROWSER_ORIGIN: ${SOCIAL_BROWSER_ORIGIN:-http://127.0.0.1:3100}
+    SOCIAL_COOKIE_SECURE: ${SOCIAL_COOKIE_SECURE:-false}
+    SOCIAL_SESSION_ABSOLUTE_SECONDS: ${SOCIAL_SESSION_ABSOLUTE_SECONDS:-604800}
+    SOCIAL_SESSION_IDLE_SECONDS: ${SOCIAL_SESSION_IDLE_SECONDS:-86400}
+    SOCIAL_RECENT_AUTH_SECONDS: ${SOCIAL_RECENT_AUTH_SECONDS:-600}
+    SOCIAL_LOGIN_ATTEMPT_SECONDS: ${SOCIAL_LOGIN_ATTEMPT_SECONDS:-300}
+    SOCIAL_PROVIDER_TIMEOUT_SECONDS: ${SOCIAL_PROVIDER_TIMEOUT_SECONDS:-5}
+    SOCIAL_AUTH_RATE_LIMIT: ${SOCIAL_AUTH_RATE_LIMIT:-10}
+    SOCIAL_SENSITIVE_RATE_LIMIT: ${SOCIAL_SENSITIVE_RATE_LIMIT:-30}
+    SOCIAL_STEAM_API_KEY: ${SOCIAL_STEAM_API_KEY:-}
+    SOCIAL_STEAM_SYNC_LEASE_SECONDS: ${SOCIAL_STEAM_SYNC_LEASE_SECONDS:-90}
+    SOCIAL_STEAM_SYNC_MAX_ATTEMPTS: ${SOCIAL_STEAM_SYNC_MAX_ATTEMPTS:-3}
+    SOCIAL_STEAM_SYNC_COOLDOWN_SECONDS: ${SOCIAL_STEAM_SYNC_COOLDOWN_SECONDS:-300}
+    SOCIAL_STEAM_REQUESTS_PER_MINUTE: ${SOCIAL_STEAM_REQUESTS_PER_MINUTE:-30}
+    SOCIAL_STEAM_REQUESTS_PER_DAY: ${SOCIAL_STEAM_REQUESTS_PER_DAY:-1000}
+    SOCIAL_STEAM_USER_REQUESTS_PER_HOUR: ${SOCIAL_STEAM_USER_REQUESTS_PER_HOUR:-12}
+    SOCIAL_STEAM_SCHEMA_TTL_SECONDS: ${SOCIAL_STEAM_SCHEMA_TTL_SECONDS:-86400}
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  init: true
+
+services:
+  postgres:
+    image: postgres:17.11
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-steamscope_social}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set local POSTGRES_PASSWORD}
+      POSTGRES_DB: steamscope_social_dev
+    ports:
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-55433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/init-test-db.sql:/docker-entrypoint-initdb.d/10-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d steamscope_social_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  redis:
+    image: redis:7.4.2-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:${REDIS_HOST_PORT:-56379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  api:
+    <<: *backend
+    command: ["uvicorn", "steamscope_social.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log", "--no-proxy-headers", "--ws-max-size", "1024", "--ws-max-queue", "16"]
+    ports:
+      - "127.0.0.1:${API_HOST_PORT:-8100}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+  worker:
+    <<: *backend
+    command: ["python", "-m", "steamscope_social.worker"]
+    healthcheck:
+      test: ["CMD", "python", "-m", "steamscope_social.worker", "--check"]
+      interval: 15s
+      timeout: 6s
+      retries: 3
+  frontend:
+    build:
+      context: .
+      dockerfile: infra/frontend.Dockerfile
+    environment:
+      INTERNAL_API_URL: http://api:8000
+      NEXT_TELEMETRY_DISABLED: "1"
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      BROWSER_ORIGIN: ${SOCIAL_BROWSER_ORIGIN:-http://127.0.0.1:3100}
+    ports:
+      - "127.0.0.1:${FRONTEND_HOST_PORT:-3100}:3000"
+    init: true
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+volumes:
+  postgres_data:

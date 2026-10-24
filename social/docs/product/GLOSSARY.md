@@ -1,0 +1,21 @@
+# Glossary
+
+- **SteamScope user:** Internal UUID account created only after verified sign-in; distinct from legacy imported subjects.
+- **Steam account:** External account whose identity is verified through Steam OpenID; one active platform link.
+- **SteamID64:** External identifier serialized as a string at every JSON/TypeScript boundary.
+- **Steam friend:** Observed Steam friendship edge; never automatically a platform connection.
+- **SteamScope connection:** Symmetric platform relationship created by an accepted request.
+- **Connection request:** Directed request with pending/accepted/rejected/cancelled state; no self-request or duplicate active pair.
+- **Conversation:** Persistent membership-scoped communication container; exactly two members for MVP.
+- **Steam synchronization:** Fetch and normalize currently accessible Steam data with explicit per-resource outcomes.
+- **Synchronization job:** Durable scheduled unit with a deduplication key, lease and bounded retries.
+- **Synchronization run:** An attempt record with outcome, start/end time and safe failure category.
+- **Game achievement schema:** Shared per-app definitions, localized display metadata and icon URLs.
+- **Player achievement:** A user/app/API-name achievement observation, including unlock state/time and freshness.
+- **Mutual game:** Intersection of two libraries after both source and platform privacy filtering.
+- **Blocking:** Directional stored edge; either direction prevents applicable interaction between the pair.
+- **Reporting:** User-submitted abuse evidence awaiting authorized moderator review.
+- **Presence:** Ephemeral online/offline observation with expiry, subject to visibility; not a durable activity log.
+- **Data freshness:** Last attempt, last successful observation and availability; old data is not silently current.
+- **Read state:** Per-member monotonic last-read message cursor; not inferred from socket connection alone.
+- **Idempotency:** Repeated requests yield one logical effect through database constraints and stable request IDs.

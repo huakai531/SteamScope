@@ -1,0 +1,6 @@
+Original SteamScope demo visuals, 2026.
+Copyright (c) 2026 edenbeca. MIT; see repository LICENSE.
+Orbit Relay, Mosslight Vale and Ember Circuit are fictional demo titles.
+These SVGs were authored from original geometric shapes for this
+repository. No commercial game artwork, screenshot, external font or personal
+avatar is included. They do not identify real Steam games or their publishers.

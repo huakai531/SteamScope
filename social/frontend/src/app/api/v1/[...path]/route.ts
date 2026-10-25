@@ -6,6 +6,7 @@ const routes: Record<string, string[]> = {
   "auth/logout": ["POST"],
   "auth/logout-all": ["POST"],
   me: ["GET", "PATCH", "DELETE"],
+  "me/avatar": ["POST", "DELETE"],
   "me/privacy": ["GET", "PATCH"],
   "me/sessions": ["GET"],
   "me/steam/sync": ["POST"],
@@ -49,6 +50,7 @@ function unavailable(code: string, status: number) {
 
 async function bodyWithinLimit(
   request: Request,
+  limit: number,
 ): Promise<ArrayBuffer | undefined> {
   if (!request.body) return undefined;
   const reader = request.body.getReader();
@@ -58,7 +60,7 @@ async function bodyWithinLimit(
     const { done, value } = await reader.read();
     if (done) break;
     length += value.length;
-    if (length > 16384) {
+    if (length > limit) {
       await reader.cancel();
       throw new Error("body-limit");
     }
@@ -88,6 +90,11 @@ async function proxy(request: Request, context: Context) {
             ? ["DELETE"]
             : undefined;
   const methods =
+    (/^users\/[A-Za-z][A-Za-z0-9_]{2,23}\/avatar\/[a-f0-9]{32}\.webp$/.test(
+      route,
+    )
+      ? ["GET"]
+      : undefined) ??
     chatMethods ??
     (/^connection-requests\/[0-9a-f-]{36}\/(accept|reject)$/i.test(route)
       ? ["POST"]
@@ -125,6 +132,24 @@ async function proxy(request: Request, context: Context) {
   if (request.headers.get("host") !== new URL(browserOrigin).host)
     return unavailable("CANONICAL_ORIGIN_REQUIRED", 400);
   if (incoming.search.length > 8192) return unavailable("INVALID_REQUEST", 400);
+  const avatarUpload = route === "me/avatar" && request.method === "POST";
+  const limit = avatarUpload ? 5 * 1024 * 1024 : 16384;
+  const length = request.headers.get("content-length");
+  if (length && (!/^\d{1,10}$/.test(length) || Number(length) > limit))
+    return unavailable(
+      avatarUpload ? "AVATAR_TOO_LARGE" : "BODY_TOO_LARGE",
+      413,
+    );
+  if (avatarUpload && request.headers.get("origin") !== browserOrigin)
+    return unavailable("ORIGIN_REJECTED", 403);
+  if (
+    avatarUpload &&
+    (!["image/png", "image/jpeg", "image/webp"].includes(
+      request.headers.get("content-type") ?? "",
+    ) ||
+      request.headers.has("content-encoding"))
+  )
+    return unavailable("AVATAR_FORMAT_UNSUPPORTED", 415);
   try {
     const internal = new URL(
       process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8100",
@@ -151,7 +176,7 @@ async function proxy(request: Request, context: Context) {
     }
     const body = ["GET", "HEAD"].includes(request.method)
       ? undefined
-      : await bodyWithinLimit(request);
+      : await bodyWithinLimit(request, limit);
     const upstream = await fetch(
       new URL(`/api/v1/${route}${incoming.search}`, internal),
       {
@@ -169,7 +194,13 @@ async function proxy(request: Request, context: Context) {
       "Referrer-Policy": "no-referrer",
       "X-Content-Type-Options": "nosniff",
     });
-    for (const key of ["content-type", "retry-after", "x-request-id"]) {
+    for (const key of [
+      "content-type",
+      "retry-after",
+      "x-request-id",
+      "cross-origin-resource-policy",
+      "content-security-policy",
+    ]) {
       const value = upstream.headers.get(key);
       if (value) outgoing.set(key, value);
     }
@@ -200,7 +231,12 @@ async function proxy(request: Request, context: Context) {
       upstream.status === 204 ? null : await upstream.arrayBuffer(),
       { status: upstream.status, headers: outgoing },
     );
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.message === "body-limit")
+      return unavailable(
+        avatarUpload ? "AVATAR_TOO_LARGE" : "BODY_TOO_LARGE",
+        413,
+      );
     // No request URL, assertion, cookie, credential or internal exception logging.
     if (route === "auth/steam/callback") {
       return new Response(null, {

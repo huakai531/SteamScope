@@ -248,7 +248,7 @@ async def test_search_limits_literal_queries_and_undiscoverability(social):
         )
     result = (await c["A"].get("/api/v1/users/search", params={"q": "{abc}%_"})).json()
     assert result["items"] == [
-        dict(handle=a["B"]["handle"], display_name="Literal {abc}%_<script>")
+        dict(handle=a["B"]["handle"], display_name="Literal {abc}%_<script>", avatar_url=None)
     ]
     assert result["next_cursor"] is None
     for change in [

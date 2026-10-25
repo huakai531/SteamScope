@@ -7,7 +7,7 @@ test("avatars prefer an approved local upload, fall back on load failure and rej
   const { container, rerender } = render(
     <PlayerAvatar
       name="Alex River"
-      src="/avatars/sample.png"
+      src="/preview-games/hades.png"
       uploadedSrc="/avatars/player.png"
     />,
   );
@@ -30,16 +30,21 @@ test("avatars prefer an approved local upload, fall back on load failure and rej
   expect(container.querySelector("img")).toBeNull();
 });
 
-test("game pictures require a known app ID rather than a misleading title match", () => {
+test("game pictures require supplied metadata with a matching app ID, not a title mapping", () => {
   const { container, rerender } = render(
-    <GameIcon title="Ember Circuit" appId={999999} />,
+    <GameIcon title="Hades" appId={999999} />,
   );
   expect(container.querySelector("img")).toBeNull();
-  rerender(<GameIcon title="Ember Circuit" appId={900000003} />);
-  expect(container.querySelector("img")).toHaveAttribute(
-    "src",
-    "/preview-games/ember-circuit.svg",
+  rerender(<GameIcon title="Hades" appId={1145360} />);
+  expect(container.querySelector("img")).toBeNull();
+  const icon =
+    "https://media.steampowered.com/steamcommunity/public/images/apps/1145360/" +
+    "a".repeat(40) +
+    ".jpg";
+  rerender(
+    <GameIcon title="Hades" appId={1145360} visual={{ icon_url: icon }} />,
   );
+  expect(container.querySelector("img")).toHaveAttribute("src", icon);
 });
 
 test("privacy choices submit the original enum value, not the presentation label", async () => {

@@ -1,0 +1,102 @@
+/* Shared game icons and platform avatars retain the accepted cards and spacing. */
+.app-shell .game-art[data-image-kind="icon"] > img {
+  width: min(48px, 100%);
+  height: min(48px, 100%);
+  object-fit: contain;
+  padding: 0;
+  border-radius: 6px;
+}
+.app-shell .game-art.game-icon[data-image-kind="icon"] > img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+.app-shell .game-art.game-icon {
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+  flex-basis: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  aspect-ratio: 1;
+}
+.app-shell .game-art.game-thumbnail {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  border-radius: 7px;
+}
+.app-shell .game-art.game-thumbnail[data-image-kind="icon"] > img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.app-shell .identity-games .game-art[data-variant="card"],
+.app-shell .library-game-card > .game-art[data-variant="card"],
+.app-shell .game-detail-identity .game-art[data-variant="thumbnail"] {
+  height: auto;
+  min-height: 0;
+  align-self: start;
+  aspect-ratio: 460 / 215;
+}
+.app-shell .game-detail-identity .game-art[data-variant="thumbnail"] {
+  width: min(160px, 100%);
+}
+.app-shell .game-art[data-image-kind="library"] > img,
+.app-shell .game-art[data-image-kind="header"] > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  padding: 0;
+}
+.game-art > .game-art-fallback {
+  position: static;
+  display: grid;
+  place-items: center;
+  opacity: 0.65;
+}
+.game-art > .game-art-fallback > svg {
+  width: 24px;
+  height: 24px;
+}
+.avatar-change-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+}
+.avatar-editor {
+  margin: 20px 0;
+}
+.avatar-dialog {
+  max-width: min(480px, calc(100vw - 32px));
+}
+.avatar-dialog input[type="file"] {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+}
+.avatar-preview {
+  display: grid;
+  place-items: center;
+  margin: 24px auto;
+}
+.avatar-preview > img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.avatar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}

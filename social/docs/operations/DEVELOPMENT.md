@@ -167,4 +167,20 @@ Account routes include `/account/profile`, `/account/privacy`, `/account/session
 
 Do not print full Compose interpolation, container environments, `.env`, credential-bearing URLs or raw provider/chat payloads. HTTP client/access logging is restricted by the application. Report unit, real-service, browser, runtime and live-user evidence separately; a weaker layer does not prove a stronger one.
 
-The [public validation summary](../development/VALIDATION.md) separates current UI checks from historical backend/live acceptance. Detailed original command/phase evidence is retained privately. Actual remote runs are linked in that summary; public deployment is not authorized.
+The [public validation summary](../development/VALIDATION.md) separates current UI checks from historical backend/live acceptance. Detailed original command/phase evidence is retained privately. See the repository Actions page for commit-specific remote checks; public deployment is not authorized.
+
+## Updating game visuals and local avatar storage
+
+Apply `uv run --frozen alembic upgrade head` with the intended isolated environment;
+the new revision is `0006_game_visuals_avatars`. For Compose, rebuild API/frontend,
+run `docker compose run --rm --no-deps api alembic upgrade head`, then recreate
+API/Worker/frontend. Retain PostgreSQL, Redis and all existing volumes. Do not use
+`down -v`. API and Worker share the new private `avatar_data` volume; frontend does
+not mount it. No Steam sync is triggered by this migration or an ordinary GET.
+
+Direct runs default to `social/storage/{environment}/avatars`; optional server-only
+`SOCIAL_AVATAR_STORAGE_DIR` overrides it. Git/build-context ignores exclude uploads.
+Tests use temporary directories and generated synthetic pixels, never owner images.
+Explicit orphan maintenance is documented in [AVATAR_STORAGE](../security/AVATAR_STORAGE.md);
+it mutates files/queue and is not part of a health check. Preserve active files when
+backing up database references. Production object storage remains future work.

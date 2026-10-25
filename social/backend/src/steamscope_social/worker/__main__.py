@@ -11,6 +11,7 @@ from steamscope_social.core.logging import configure_logging
 from steamscope_social.core.resources import Resources
 from steamscope_social.modules.steam.client import SteamClient
 from steamscope_social.modules.steam.jobs import claim_next, process_claim
+from steamscope_social.modules.users.avatars import drain_avatar_deletions
 
 logger = logging.getLogger("steamscope_social.worker")
 
@@ -29,6 +30,7 @@ async def run(settings: Settings, stop: asyncio.Event, *, check: bool = False) -
         while not stop.is_set():
             try:
                 if (await resources.readiness()).status == "ready":
+                    await drain_avatar_deletions(resources, settings)
                     claim = await claim_next(resources, settings)
                     if claim:
                         task = asyncio.create_task(

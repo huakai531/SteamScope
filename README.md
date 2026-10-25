@@ -17,6 +17,8 @@ Turn permitted gaming history into player profiles, find shared interests, conne
 - Explained discovery using only authorized shared gaming evidence.
 - Connection requests, consent, blocking, report intake and persistent notifications.
 - Direct chat with durable history, real-time delivery, read state, typing and presence.
+- Custom profile avatars with validated uploads and privacy-aware serving. [Storage policy](social/docs/security/AVATAR_STORAGE.md).
+- Official Steam artwork for saved games, with high-resolution cards, compact thumbnails and graceful fallbacks. [Visual strategy](social/docs/architecture/GAME_VISUALS.md).
 
 Browsing reads saved data; it does not synchronize with Steam. Unknown, empty, restricted and stale data remain distinct. A Steam friendship is not permission to message someone.
 

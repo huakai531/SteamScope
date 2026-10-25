@@ -14,3 +14,6 @@
 **/tests
 **/test-results
 **/playwright-report
+
+# Private, generated user uploads
+storage/

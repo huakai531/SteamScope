@@ -422,3 +422,19 @@ erDiagram
 
 There is no durable presence/typing/draft table or JSON history blob. All 23 earlier domain tables
 and migrations remain unchanged. See DIRECT_CHAT for pair locking, sequences and read cursor semantics.
+
+## Game visuals and avatars (0006_game_visuals_avatars)
+
+This additive revision follows `0005_phase6_chat`. `users.avatar_key` is nullable
+VARCHAR(37), constrained to a generated 32-lowercase-hex `.webp` name;
+`avatar_updated_at` is nullable UTC timestamp. `avatar_deletions` stores a key PK
+and creation timestamp for durable file-erasure retries, without retaining an
+owner identity. Replacement/removal queues retired keys in the user transaction.
+Account deletion removes the reference and queues its file before deleting the user.
+
+Shared `games.icon_hash` already contains Steam source metadata. No duplicate
+image columns or user-game artwork rows are added; URLs are derived in the domain
+DTO after authorization. Existing uniqueness and gameplay fields are unchanged.
+Downgrade refuses active avatar references or pending deletions; only disposable
+test databases were downgraded. See [visuals](../architecture/GAME_VISUALS.md) and
+[storage](../security/AVATAR_STORAGE.md).

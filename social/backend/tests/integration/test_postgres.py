@@ -40,6 +40,7 @@ async def test_isolated_postgres_and_current_migration():
                 .all()
             )
             assert set(tables) == {
+                "avatar_deletions",
                 "conversations",
                 "conversation_members",
                 "messages",

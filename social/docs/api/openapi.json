@@ -1459,6 +1459,178 @@
         ]
       }
     },
+    "/api/v1/me/avatar": {
+      "post": {
+        "tags": [
+          "Platform avatars"
+        ],
+        "summary": "Upload Avatar",
+        "description": "Owner/session + exact Origin/CSRF. Raw PNG/JPEG/WebP body, at most 5 MiB.",
+        "operationId": "upload_avatar_api_v1_me_avatar_post",
+        "requestBody": {
+          "content": {
+            "image/png": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/webp": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exactly the configured browser origin"
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session-bound token from GET /api/v1/auth/csrf"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Platform avatars"
+        ],
+        "summary": "Remove Avatar",
+        "operationId": "remove_avatar_api_v1_me_avatar_delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exactly the configured browser origin"
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session-bound token from GET /api/v1/auth/csrf"
+          }
+        ]
+      }
+    },
+    "/api/v1/users/{handle}/avatar/{key}": {
+      "get": {
+        "tags": [
+          "Platform avatars"
+        ],
+        "summary": "Image",
+        "description": "Every read rechecks profile privacy and blocks. No public storage mount/cache.",
+        "operationId": "image_api_v1_users__handle__avatar__key__get",
+        "parameters": [
+          {
+            "name": "handle",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Handle"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "image/webp": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ]
+      }
+    },
     "/api/v1/conversations/direct": {
       "post": {
         "tags": [
@@ -6183,6 +6355,17 @@
     "schemas": {
       "AccountView": {
         "properties": {
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
           "id": {
             "type": "string",
             "format": "uuid",
@@ -6809,6 +6992,9 @@
       },
       "GameView": {
         "properties": {
+          "visual": {
+            "$ref": "#/components/schemas/GameVisual"
+          },
           "app_id": {
             "type": "integer",
             "title": "App Id"
@@ -6867,6 +7053,54 @@
           "recent_minutes"
         ],
         "title": "GameView"
+      },
+      "GameVisual": {
+        "properties": {
+          "icon_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon Url"
+          },
+          "thumbnail_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumbnail Url"
+          },
+          "card_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Card Url"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "steam",
+              "unavailable"
+            ],
+            "title": "Source",
+            "default": "unavailable"
+          }
+        },
+        "type": "object",
+        "title": "GameVisual"
       },
       "GamesView": {
         "properties": {
@@ -7211,6 +7445,9 @@
       },
       "MutualGame": {
         "properties": {
+          "visual": {
+            "$ref": "#/components/schemas/GameVisual"
+          },
           "app_id": {
             "type": "integer",
             "title": "App Id"
@@ -7408,6 +7645,17 @@
       },
       "Person": {
         "properties": {
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
           "handle": {
             "type": "string",
             "title": "Handle"
@@ -7587,6 +7835,9 @@
       },
       "PlayerGame": {
         "properties": {
+          "visual": {
+            "$ref": "#/components/schemas/GameVisual"
+          },
           "app_id": {
             "type": "integer",
             "title": "App Id"
@@ -7728,6 +7979,17 @@
       },
       "PlayerProfile": {
         "properties": {
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
           "handle": {
             "type": "string",
             "title": "Handle"

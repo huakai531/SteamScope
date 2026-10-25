@@ -19,6 +19,7 @@ assert len(list((root / "docs/adr").glob("*.md"))) >= 15
 assert (root / "docs/architecture/DIAGRAMS.md").read_text().count("```mermaid") >= 8
 schema = json.loads((root / "docs/api/openapi.json").read_text())
 assert set(schema["paths"]) == {
+    "/api/v1/me/avatar", "/api/v1/users/{handle}/avatar/{key}",
     "/api/v1/conversations/direct", "/api/v1/conversations",
     "/api/v1/conversations/{conversation_id}", "/api/v1/conversations/{conversation_id}/messages",
     "/api/v1/conversations/{conversation_id}/read", "/api/v1/messages/{message_id}",
@@ -54,7 +55,13 @@ assert {path.name for path in (root / "backend/migrations/versions").glob("*.py"
     "0003_phase3b_steam_details_phase3b_achievements_and_friends.py",
     "0004_phase5_social_phase5_social_graph.py",
     "0005_phase6_chat_phase6_direct_chat.py",
+    "0006_game_visuals_avatars.py",
 }
+assert set(schema["paths"]["/api/v1/me/avatar"]) == {"post", "delete"}
+assert set(schema["paths"]["/api/v1/users/{handle}/avatar/{key}"]) == {"get"}
+for service in ["api", "worker"]:
+    assert "avatar_data:/app/storage/avatars" in compose["services"][service]["volumes"]
+assert not compose["services"]["frontend"].get("volumes")
 assert "**/tests" in (root / ".dockerignore").read_text()
 assert "logging: false" in (root / "frontend/next.config.ts").read_text()
 for source in (root / "backend/src").rglob("*.py"):
@@ -65,6 +72,7 @@ tracked = subprocess.check_output(git + ["ls-files", "social"], cwd=repo, text=T
 for name in tracked:
     parts = Path(name).parts
     assert Path(name).name != ".env" and "node_modules" not in parts and ".venv" not in parts
+    assert not name.startswith("social/storage/")
     assert Path(name).suffix.lower() not in {".zip", ".log", ".pem", ".key"}
 print("PASS: static Compose structure, isolated package, phase scope, ADRs/diagrams, contract, tracked file exclusions")
 print("NOTE: static parsing does not prove Docker Compose validation, image build or service startup")

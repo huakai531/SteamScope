@@ -14,6 +14,47 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
+test("avatar proxy preserves binary data and bounds MIME, size, origin and route", async () => {
+  const fetcher = vi.fn().mockResolvedValue(
+    new Response(new Uint8Array([1, 2, 3]), {
+      headers: { "Content-Type": "image/webp" },
+    }),
+  );
+  vi.stubGlobal("fetch", fetcher);
+  const src = "users/synthetic/avatar/" + "a".repeat(32) + ".webp";
+  const response = await GET(
+    makeRequest("http://127.0.0.1:3100/api/v1/" + src),
+    context(src),
+  );
+  expect(response.headers.get("content-type")).toBe("image/webp");
+  expect(response.headers.get("cache-control")).toContain("no-store");
+  expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
+  fetcher.mockClear();
+  for (const [type, length, origin, status] of [
+    ["image/svg+xml", "10", "http://127.0.0.1:3100", 415],
+    ["image/png", "6000000", "http://127.0.0.1:3100", 413],
+    ["image/png", "10", "https://evil.example", 403],
+  ] as const) {
+    expect(
+      (
+        await POST(
+          makeRequest("http://127.0.0.1:3100/api/v1/me/avatar", {
+            method: "POST",
+            headers: {
+              "Content-Type": type,
+              "Content-Length": length,
+              Origin: origin,
+            },
+            body: "synthetic",
+          }),
+          context("me/avatar"),
+        )
+      ).status,
+    ).toBe(status);
+  }
+  expect(fetcher).not.toHaveBeenCalled();
+});
+
 test("social proxy permits explicit methods and keeps unknown surfaces closed", async () => {
   const fetcher = vi
     .fn()
@@ -268,7 +309,7 @@ test("proxy rejects arbitrary destinations, noncanonical origin and oversized wr
         context("auth/logout"),
       )
     ).status,
-  ).toBe(502);
+  ).toBe(413);
   expect(fetcher).not.toHaveBeenCalled();
 });
 

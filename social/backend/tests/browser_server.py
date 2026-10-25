@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -30,6 +31,8 @@ from tests.steam_details_fixtures import transport as steam_data_transport
 from tests.steam_fixtures import KEY  # noqa: E402
 
 config = Settings()
+avatar_directory = tempfile.TemporaryDirectory(prefix="steamscope-browser-avatars-")
+config.avatar_storage_dir = Path(avatar_directory.name)
 assert config.environment == "test"
 assert make_url(config.database_url.get_secret_value()).database == "steamscope_social_test"
 assert config.browser_origin == "http://127.0.0.1:3200"
@@ -121,6 +124,7 @@ async def lifespan(application):
             keys = [key async for key in resources.redis.scan_iter(match=config.redis_prefix + "*")]
             if keys:
                 await resources.redis.delete(*keys)
+            avatar_directory.cleanup()
 
 
 app.router.lifespan_context = lifespan

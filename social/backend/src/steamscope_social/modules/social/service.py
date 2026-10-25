@@ -36,6 +36,7 @@ from steamscope_social.modules.social.schemas import (
     RequestView,
     SocialRelationship,
 )
+from steamscope_social.modules.users.avatars import avatar_url
 from steamscope_social.modules.users.models import User
 
 
@@ -124,7 +125,11 @@ async def visible_person(
         return None
     if not directed_consent and not policy.permits(settings.profile):
         return None
-    return Person(handle=user.handle, display_name=user.display_name)
+    return Person(
+        handle=user.handle,
+        display_name=user.display_name,
+        avatar_url=avatar_url(user) if policy.permits(settings.profile) else None,
+    )
 
 
 async def eligible(db: AsyncSession, actor: UUID, target: User) -> bool:

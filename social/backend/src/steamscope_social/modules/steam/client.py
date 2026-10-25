@@ -14,6 +14,7 @@ import httpx
 
 from steamscope_social.core.config import Settings
 from steamscope_social.modules.steam.payloads import AchievementData, DefinitionData, FriendData
+from steamscope_social.modules.steam.visuals import icon_hash
 
 Resource = Literal["profile", "library", "recent", "schema", "achievements", "friends"]
 RESOURCES: tuple[Resource, ...] = ("profile", "library", "recent")
@@ -167,9 +168,8 @@ def map_response(resource: Resource, payload: object, steam_id: str, app_id: int
             last = optional_int(game, "rtime_last_played")
             if last and last > int(datetime.now(UTC).timestamp()) + 300:
                 raise ValueError("future_playtime")
-            icon = optional_text(game, "img_icon_url", 40)
-            if icon and not re.fullmatch(r"[a-fA-F0-9]{40}", icon):
-                icon = None
+            # Artwork is optional: malformed/missing metadata cannot invalidate playtime.
+            icon = icon_hash(game.get("img_icon_url"))
             result.append(
                 GameData(
                     app_id,

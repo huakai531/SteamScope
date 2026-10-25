@@ -19,6 +19,7 @@ export async function accountRequest<T>(
   path: string,
   method = "GET",
   body?: unknown,
+  image?: Blob,
 ): Promise<T> {
   const headers: Record<string, string> = {};
   if (method !== "GET") {
@@ -27,13 +28,14 @@ export async function accountRequest<T>(
     headers["X-CSRF-Token"] = csrf.csrf_token;
   }
   if (body !== undefined) headers["Content-Type"] = "application/json";
+  if (image) headers["Content-Type"] = image.type;
   const response = await fetch("/api/v1" + path, {
     method,
     headers,
     credentials: "same-origin",
     cache: "no-store",
     redirect: "error",
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: image ?? (body === undefined ? undefined : JSON.stringify(body)),
   });
   if (!response.ok) {
     if (
@@ -55,6 +57,15 @@ export function accountMessage(error: unknown): string {
   if (!(error instanceof AccountError))
     return "Cannot reach your account. Please try again.";
   const messages: Record<string, string> = {
+    AVATAR_TOO_LARGE: "Choose an image smaller than 5 MiB.",
+    AVATAR_FORMAT_UNSUPPORTED:
+      "Choose a PNG, JPEG or WebP image. Animation is not supported.",
+    AVATAR_IMAGE_INVALID:
+      "This image could not be safely read. Choose another image.",
+    AVATAR_DIMENSIONS_EXCEEDED:
+      "Choose an image up to 16 megapixels and 8192 pixels per side.",
+    AVATAR_STORAGE_UNAVAILABLE:
+      "Avatar storage is unavailable. Your current avatar is unchanged.",
     AUTH_REQUIRED: "Your session has ended. Sign in again.",
     HANDLE_UNAVAILABLE: "That handle is already in use. Choose another.",
     INVALID_REQUEST: "Check the highlighted fields and try again.",

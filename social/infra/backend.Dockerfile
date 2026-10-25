@@ -6,7 +6,7 @@ WORKDIR /app
 COPY backend/pyproject.toml backend/uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY backend/ ./
-RUN uv sync --frozen --no-dev && useradd --create-home --uid 10001 appuser && chown -R appuser:appuser /app
+RUN uv sync --frozen --no-dev && useradd --create-home --uid 10001 appuser && mkdir -p /app/storage/avatars && chmod 700 /app/storage/avatars && chown -R appuser:appuser /app
 USER appuser
 EXPOSE 8000
 CMD ["uvicorn", "steamscope_social.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log", "--no-proxy-headers", "--ws-max-size", "1024", "--ws-max-queue", "16"]

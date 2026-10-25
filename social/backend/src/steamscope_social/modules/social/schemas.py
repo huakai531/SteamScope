@@ -20,6 +20,7 @@ class ReportInput(TargetInput):
 
 
 class Person(BaseModel):
+    avatar_url: str | None = None
     handle: str
     display_name: str
 

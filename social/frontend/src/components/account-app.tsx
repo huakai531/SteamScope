@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { AvatarEditor } from "./avatar-editor";
 import { ChoiceSelect } from "./choice-select";
 import { Button } from "./ui";
 import { Input, Textarea } from "./ui";
 import { AppShell } from "./app-shell";
-import { PlayerAvatar, HelpDisclosure } from "./ui";
+import { HelpDisclosure } from "./ui";
 import { SteamSignIn } from "@/components/steam-sign-in";
 import {
   useEffect,
@@ -139,7 +140,7 @@ export function AccountApp({ section }: { section: Section }) {
           {section === "overview" && (
             <section className="account-panel">
               <p className="eyebrow">YOUR STEAMSCOPE ACCOUNT</p>
-              <PlayerAvatar name={user.display_name} large />
+              <AvatarEditor account={user} />
               <h1>{user.display_name}</h1>
               <p className="account-handle">@{user.handle}</p>
               <dl>
@@ -224,6 +225,7 @@ function ProfileForm({ account }: { account: Account }) {
   return (
     <section className="account-panel">
       <h1>Platform profile</h1>
+      <AvatarEditor account={account} />
       <p>
         These are your SteamScope fields. Your verified Steam identity cannot be
         edited here.

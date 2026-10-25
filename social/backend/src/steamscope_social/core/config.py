@@ -38,6 +38,12 @@ class Settings(BaseSettings):
         hide_input_in_errors=True,
     )
     environment: Literal["development", "test", "production"] = "development"
+    avatar_storage_dir: Path | None = None
+
+    @property
+    def avatar_storage_path(self) -> Path:
+        return self.avatar_storage_dir or SOCIAL_ROOT / "storage" / self.environment / "avatars"
+
     database_url: SecretStr = SecretStr(
         "postgresql+asyncpg://steamscope_social:local_only_change_me@127.0.0.1:55433/"
         "steamscope_social_dev"

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useState,
   Children,
   isValidElement,
   type ReactElement,
@@ -8,6 +9,13 @@ import {
   type ComponentProps,
 } from "react";
 import Image from "next/image";
+import {
+  gameArtSources,
+  artFailedRecently,
+  rememberArtFailure,
+  type GameVisual,
+  type GameArtVariant,
+} from "@/lib/game-art";
 import { Avatar as AvatarPrimitive } from "./ui/notchset/avatar";
 import { EmptyState as EmptyPrimitive } from "./ui/notchset/empty-state";
 import {
@@ -65,8 +73,7 @@ export function Icon({ name }: { name: IconName }) {
     </svg>
   );
 }
-// Public person DTOs have no uploaded-avatar field yet. This component is the
-// presentation boundary; it never requests private Steam images or arbitrary URLs.
+// All live avatars use a same-origin endpoint that rechecks profile authorization.
 export function PlayerAvatar({
   name,
   large = false,
@@ -80,10 +87,10 @@ export function PlayerAvatar({
 }) {
   const safeImage = (value?: string | null) =>
     value &&
-    /^\/(?:avatars|preview-games)\/[A-Za-z0-9_./-]+\.(?:png|jpe?g|webp)$/i.test(
+    (/^\/api\/v1\/users\/[A-Za-z][A-Za-z0-9_]{2,23}\/avatar\/[a-f0-9]{32}\.webp$/.test(
       value,
-    ) &&
-    !value.includes("..")
+    ) ||
+      /^\/avatars\/[A-Za-z0-9_-]+\.(?:png|jpe?g|webp)$/.test(value))
       ? value
       : undefined;
   return (
@@ -100,49 +107,120 @@ export function PlayerAvatar({
   );
 }
 export const Avatar = PlayerAvatar;
-// Original demo art only. Real game IDs retain the neutral fallback.
-const localGameArt: Record<number, string> = {
-  900000001: "/preview-games/orbit-relay.svg",
-  900000002: "/preview-games/mosslight-vale.svg",
-  900000003: "/preview-games/ember-circuit.svg",
+type ThumbnailSize = 28 | 32 | 36 | 40 | 44 | 48 | 56;
+type GameArtProps = {
+  title: string;
+  appId?: number;
+  visual?: GameVisual;
+  variant?: GameArtVariant;
+  /** Square list thumbnail; omitted on the existing wide detail preview. */
+  thumbnailSize?: ThumbnailSize;
+  /** Explicit bundled artwork for labeled illustrative content only. */
+  demoSrc?: string;
+  className?: string;
 };
 export function GameArt({
   title,
-  icon = false,
   appId,
-}: {
-  title: string;
-  icon?: boolean;
-  appId?: number;
-}) {
-  const art = appId === undefined ? undefined : localGameArt[appId];
+  visual,
+  variant = "card",
+  thumbnailSize,
+  demoSrc,
+  className = "",
+}: GameArtProps) {
+  const [, retrySelection] = useState(0);
+  const [iconSize, setIconSize] = useState<{ url: string; size: number }>();
+  const source = gameArtSources(appId, visual, variant, demoSrc).find(
+    (candidate) => !artFailedRecently(candidate.url),
+  );
+  const squareSize = variant === "thumbnail" ? thumbnailSize : undefined;
+  const containedIconSize =
+    squareSize && source?.kind === "icon"
+      ? Math.min(
+          32,
+          squareSize,
+          iconSize?.url === source.url ? iconSize.size : 32,
+        )
+      : undefined;
   return (
     <span
-      className={`game-art${icon ? " game-icon" : ""}`}
+      className={`game-art${variant === "icon" ? " game-icon" : ""}${squareSize ? " game-thumbnail" : ""} ${className}`}
+      style={
+        squareSize
+          ? {
+              width: squareSize,
+              height: squareSize,
+              minHeight: squareSize,
+              flexBasis: squareSize,
+            }
+          : undefined
+      }
       data-game-id={appId}
+      data-game={title}
+      data-variant={variant}
+      data-image-kind={source?.kind ?? "fallback"}
       data-art={
         Array.from(title).reduce((n, c) => n + c.codePointAt(0)!, 0) % 4
       }
-      aria-hidden="true"
     >
-      {art ? (
-        <Image src={art} alt="" width={240} height={140} unoptimized />
-      ) : icon ? (
-        <Icon name="games" />
+      {source ? (
+        <Image
+          key={source.url}
+          src={source.url}
+          alt={`${title} artwork`}
+          width={source.width}
+          height={source.height}
+          sizes={squareSize ? `${squareSize}px` : undefined}
+          style={
+            containedIconSize
+              ? { width: containedIconSize, height: containedIconSize }
+              : undefined
+          }
+          unoptimized
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          onLoad={
+            squareSize && source.kind === "icon"
+              ? (event) => {
+                  const image = event.currentTarget;
+                  setIconSize({
+                    url: source.url,
+                    size: Math.min(image.naturalWidth, image.naturalHeight),
+                  });
+                }
+              : undefined
+          }
+          onError={() => {
+            rememberArtFailure(source.url);
+            retrySelection((n) => n + 1);
+          }}
+        />
       ) : (
-        <span>{Array.from(title).slice(0, 2).join("").toUpperCase()}</span>
+        <span
+          className="game-art-fallback"
+          role="img"
+          aria-label={`Artwork unavailable for ${title}`}
+        >
+          <Icon name="games" />
+        </span>
       )}
     </span>
   );
 }
-export function GameIcon({ title, appId }: { title: string; appId?: number }) {
-  return <GameArt title={title} appId={appId} icon />;
+export function GameIcon(props: Omit<GameArtProps, "variant">) {
+  return <GameArt {...props} variant="icon" />;
 }
-export function GameChip({ title, appId }: { title: string; appId?: number }) {
+export function GameThumbnail({
+  size = 44,
+  ...props
+}: Omit<GameArtProps, "variant" | "thumbnailSize"> & { size?: ThumbnailSize }) {
+  return <GameArt {...props} variant="thumbnail" thumbnailSize={size} />;
+}
+export function GameChip(props: Omit<GameArtProps, "variant">) {
   return (
     <span className="game-chip">
-      <GameIcon title={title} appId={appId} />
-      <span>{title}</span>
+      <GameThumbnail {...props} size={36} />
+      <span>{props.title}</span>
     </span>
   );
 }

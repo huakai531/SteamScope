@@ -31,6 +31,7 @@ from steamscope_social.modules.privacy.models import PrivacySettings
 from steamscope_social.modules.social.policy import access, pair
 from steamscope_social.modules.social.schemas import Person, ReportReceipt
 from steamscope_social.modules.social.service import verified_user
+from steamscope_social.modules.users.avatars import avatar_url
 from steamscope_social.modules.users.models import User
 
 logger = logging.getLogger("steamscope_social.chat")
@@ -163,7 +164,9 @@ async def view(actor: Actor, target: User, row: Conversation) -> ConversationVie
     privacy = await db.get(PrivacySettings, target.id)
     policy = await access(db, owner, target.id)
     person = (
-        Person(handle=target.handle, display_name=target.display_name)
+        Person(
+            handle=target.handle, display_name=target.display_name, avatar_url=avatar_url(target)
+        )
         if privacy and policy.permits(privacy.profile)
         else None
     )

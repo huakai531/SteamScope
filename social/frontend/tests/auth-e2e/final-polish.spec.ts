@@ -31,6 +31,10 @@ const games = [
   },
 ].map((game, index) => ({
   ...game,
+  visual: {
+    source: "steam",
+    icon_url: `https://media.steampowered.com/steamcommunity/public/images/apps/${game.app_id}/${"e".repeat(40)}.jpg`,
+  },
   last_played_at: "2026-10-23T20:00:00Z",
   achievements: {
     state: index ? { ...state, status: "never", data_available: false } : state,
@@ -101,6 +105,25 @@ async function fixture(page: Page) {
     external.push(new URL(route.request().url()).hostname);
     await route.abort();
   });
+  // Approved synthetic artwork fulfills mock CDN requests locally; no Steam call.
+  await page.route(
+    "https://media.steampowered.com/steamcommunity/public/images/apps/**",
+    async (route) => {
+      const app = Number(
+        new URL(route.request().url()).pathname.split("/").at(-2),
+      );
+      const file = (
+        {
+          900000001: "orbit-relay.svg",
+          900000002: "mosslight-vale.svg",
+          900000003: "ember-circuit.svg",
+        } as Record<number, string>
+      )[app];
+      await route.fulfill({
+        path: join(process.cwd(), "public/preview-games", file),
+      });
+    },
+  );
   const conversation = {
     id: cid,
     person: { handle: "visual_jun", display_name: "Jun" },

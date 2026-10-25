@@ -35,6 +35,7 @@ export function MutualGamesStrip({
             <GameChip
               title={game.name ?? "Game title unavailable"}
               appId={game.app_id}
+              visual={game.visual}
             />
           </li>
         ))}
@@ -56,7 +57,10 @@ export function DiscoverHero({ person }: { person: Person }) {
         <p>Find people who actually play what you play.</p>
       </div>
       <Link className="discover-own-profile" href={`/users/${person.handle}`}>
-        <PlayerAvatar name={person.display_name} />
+        <PlayerAvatar
+          uploadedSrc={person.avatar_url}
+          name={person.display_name}
+        />
         <span>
           <small>Your gaming identity</small>
           <strong>{person.display_name}</strong>
@@ -98,7 +102,10 @@ export function DiscoverPlayerCard({
     >
       <header className="discover-player-header">
         <Link className="discover-identity" href={`/users/${person.handle}`}>
-          <PlayerAvatar name={person.display_name} />
+          <PlayerAvatar
+            uploadedSrc={person.avatar_url}
+            name={person.display_name}
+          />
           <div>
             <h3>{person.display_name}</h3>
             <span className="discover-handle">@{person.handle}</span>

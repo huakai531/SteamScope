@@ -9,6 +9,7 @@ def view(*, stale=False, minutes=100, recent=10):
         games=games,
         profile=Object(
             handle="fixture",
+            avatar_url=None,
             display_name="Fixture",
             library_state=Object(data_available=True, stale=stale),
             recent_state=Object(data_available=not stale),

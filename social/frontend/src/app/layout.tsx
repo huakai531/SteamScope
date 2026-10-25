@@ -6,6 +6,7 @@ import "./community.css";
 import "./discover.css";
 import "./beautiful-ui.css";
 import "./product-polish.css";
+import "./visuals.css";
 import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {

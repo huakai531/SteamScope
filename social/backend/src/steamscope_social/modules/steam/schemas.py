@@ -2,7 +2,9 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+
+from steamscope_social.modules.steam.visuals import GameVisual
 
 
 class ResourceView(BaseModel):
@@ -66,6 +68,7 @@ class SteamProfileView(BaseModel):
 
 
 class GameView(BaseModel):
+    visual: GameVisual = Field(default_factory=GameVisual)
     app_id: int
     name: str | None
     total_minutes: int | None

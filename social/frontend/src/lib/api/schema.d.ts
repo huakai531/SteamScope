@@ -229,6 +229,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Avatar
+         * @description Owner/session + exact Origin/CSRF. Raw PNG/JPEG/WebP body, at most 5 MiB.
+         */
+        post: operations["upload_avatar_api_v1_me_avatar_post"];
+        /** Remove Avatar */
+        delete: operations["remove_avatar_api_v1_me_avatar_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/{handle}/avatar/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Image
+         * @description Every read rechecks profile privacy and blocks. No public storage mount/cache.
+         */
+        get: operations["image_api_v1_users__handle__avatar__key__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/conversations/direct": {
         parameters: {
             query?: never;
@@ -960,6 +1001,8 @@ export interface components {
     schemas: {
         /** AccountView */
         AccountView: {
+            /** Avatar Url */
+            avatar_url?: string | null;
             /**
              * Id
              * Format: uuid
@@ -1170,6 +1213,7 @@ export interface components {
         };
         /** GameView */
         GameView: {
+            visual?: components["schemas"]["GameVisual"];
             /** App Id */
             app_id: number;
             /** Name */
@@ -1180,6 +1224,21 @@ export interface components {
             recent_minutes: number | null;
             /** Last Played At */
             last_played_at?: string | null;
+        };
+        /** GameVisual */
+        GameVisual: {
+            /** Icon Url */
+            icon_url?: string | null;
+            /** Thumbnail Url */
+            thumbnail_url?: string | null;
+            /** Card Url */
+            card_url?: string | null;
+            /**
+             * Source
+             * @default unavailable
+             * @enum {string}
+             */
+            source: "steam" | "unavailable";
         };
         /** GamesView */
         GamesView: {
@@ -1306,6 +1365,7 @@ export interface components {
         };
         /** MutualGame */
         MutualGame: {
+            visual?: components["schemas"]["GameVisual"];
             /** App Id */
             app_id: number;
             /** Name */
@@ -1359,6 +1419,8 @@ export interface components {
         };
         /** Person */
         Person: {
+            /** Avatar Url */
+            avatar_url?: string | null;
             /** Handle */
             handle: string;
             /** Display Name */
@@ -1409,6 +1471,7 @@ export interface components {
         };
         /** PlayerGame */
         PlayerGame: {
+            visual?: components["schemas"]["GameVisual"];
             /** App Id */
             app_id: number;
             /** Name */
@@ -1446,6 +1509,8 @@ export interface components {
         };
         /** PlayerProfile */
         PlayerProfile: {
+            /** Avatar Url */
+            avatar_url?: string | null;
             /** Handle */
             handle: string;
             /** Display Name */
@@ -3045,6 +3110,94 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    upload_avatar_api_v1_me_avatar_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly the configured browser origin */
+                Origin: string;
+                /** @description Session-bound token from GET /api/v1/auth/csrf */
+                "X-CSRF-Token": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "image/png": string;
+                "image/jpeg": string;
+                "image/webp": string;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountView"];
+                };
+            };
+        };
+    };
+    remove_avatar_api_v1_me_avatar_delete: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly the configured browser origin */
+                Origin: string;
+                /** @description Session-bound token from GET /api/v1/auth/csrf */
+                "X-CSRF-Token": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountView"];
+                };
+            };
+        };
+    };
+    image_api_v1_users__handle__avatar__key__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                handle: string;
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/webp": string;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

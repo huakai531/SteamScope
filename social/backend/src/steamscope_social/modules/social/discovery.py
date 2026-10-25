@@ -117,7 +117,11 @@ def rank(left: Projection, right: Projection, steam_friend: bool) -> Recommendat
     if steam_friend:
         reasons.append("Your Steam friend is also on SteamScope")
     return Recommendation(
-        person=Person(handle=right.profile.handle, display_name=right.profile.display_name),
+        person=Person(
+            handle=right.profile.handle,
+            display_name=right.profile.display_name,
+            avatar_url=right.profile.avatar_url,
+        ),
         score=score,
         mutual_games=len(common) if available else None,
         recent_overlap=len(recent)

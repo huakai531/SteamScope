@@ -50,6 +50,8 @@ from steamscope_social.modules.steam.models import (
     UserGame,
 )
 from steamscope_social.modules.steam.schemas import AchievementView
+from steamscope_social.modules.steam.visuals import game_visual
+from steamscope_social.modules.users.avatars import avatar_url
 from steamscope_social.modules.users.models import User
 
 
@@ -197,6 +199,7 @@ async def project(db: AsyncSession, viewer: UUID, handle: str, config: Settings)
     profile = PlayerProfile(
         handle=user.handle,
         display_name=user.display_name,
+        avatar_url=avatar_url(user),
         biography=user.biography,
         is_owner=owner,
         locale=user.locale if owner else None,
@@ -315,6 +318,7 @@ async def project(db: AsyncSession, viewer: UUID, handle: str, config: Settings)
             PlayerGame(
                 app_id=row.app_id,
                 name=game.name,
+                visual=game_visual(game.app_id, game.icon_hash),
                 total_minutes=row.total_minutes if playtime else None,
                 recent_minutes=row.recent_minutes if playtime and recent_fresh else None,
                 last_played_at=row.last_played_at if playtime else None,
@@ -413,6 +417,7 @@ def comparison(left: Projection, right: Projection) -> PlayerComparison:
             MutualGame(
                 app_id=a.app_id,
                 name=a.name,
+                visual=a.visual,
                 left_minutes=a.total_minutes,
                 right_minutes=b.total_minutes,
                 difference_minutes=a.total_minutes - b.total_minutes

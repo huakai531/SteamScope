@@ -42,6 +42,7 @@ from steamscope_social.modules.privacy.models import PrivacySettings
 from steamscope_social.modules.privacy.schemas import PrivacyView
 from steamscope_social.modules.steam.jobs import clear_imported
 from steamscope_social.modules.steam.models import SyncState
+from steamscope_social.modules.users.avatars import avatar_url, retire_avatar
 from steamscope_social.modules.users.schemas import AccountView, DeleteAccount, ProfileUpdate
 
 router = APIRouter(
@@ -112,6 +113,7 @@ async def account_view(actor: Actor) -> AccountView:
         id=user.id,
         handle=user.handle,
         display_name=user.display_name,
+        avatar_url=avatar_url(user),
         biography=user.biography,
         locale=user.locale,
         timezone=user.timezone,
@@ -389,6 +391,7 @@ async def delete_account(request: Request, body: DeleteAccount) -> Response:
         ):
             raise AuthError(403, "REAUTH_REQUIRED")
         await clear_imported(actor.db, actor.user, deleting=True)
+        await retire_avatar(actor.db, actor.user.avatar_key)
         # FKs atomically erase linkage, settings, credentials and account-bound attempts.
         await actor.db.delete(actor.user)
         await actor.db.flush()

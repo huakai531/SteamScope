@@ -7,6 +7,7 @@ x-backend: &backend
     dockerfile: infra/backend.Dockerfile
   environment: &backend-env
     SOCIAL_ENVIRONMENT: development
+    SOCIAL_AVATAR_STORAGE_DIR: /app/storage/avatars
     SOCIAL_DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-steamscope_social}:${POSTGRES_PASSWORD:?Set local POSTGRES_PASSWORD}@postgres:5432/steamscope_social_dev
     SOCIAL_REDIS_URL: redis://redis:6379/0
     SOCIAL_CORS_ORIGINS: '${SOCIAL_CORS_ORIGINS:-["http://localhost:3100","http://127.0.0.1:3100"]}'
@@ -34,6 +35,8 @@ x-backend: &backend
       condition: service_healthy
     redis:
       condition: service_healthy
+  volumes:
+    - avatar_data:/app/storage/avatars
   init: true
 
 services:
@@ -105,3 +108,4 @@ services:
 
 volumes:
   postgres_data:
+  avatar_data:

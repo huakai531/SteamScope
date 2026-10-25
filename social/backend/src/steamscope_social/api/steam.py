@@ -31,6 +31,7 @@ from steamscope_social.modules.steam.schemas import (
     SteamProfileView,
     SyncStatusView,
 )
+from steamscope_social.modules.steam.visuals import game_visual
 
 router = APIRouter(
     prefix="/api/v1/me/steam",
@@ -193,6 +194,7 @@ async def games(
                 GameView(
                     app_id=row.app_id,
                     name=game.name,
+                    visual=game_visual(game.app_id, game.icon_hash),
                     total_minutes=row.total_minutes,
                     recent_minutes=row.recent_minutes if recent_valid else None,
                     last_played_at=row.last_played_at,
@@ -225,6 +227,7 @@ async def recent_games(request: Request) -> GamesView:
                 GameView(
                     app_id=row.app_id,
                     name=game.name,
+                    visual=game_visual(game.app_id, game.icon_hash),
                     total_minutes=row.total_minutes,
                     recent_minutes=row.recent_minutes,
                 )

@@ -121,3 +121,17 @@ description when either party is deleted. Minimal reason/status/times survive on
 expiry. This choice prioritizes account erasure over the other participant retaining this history.
 Steam-import clear does not delete chat or platform relationships. Tests verify both distinct paths.
 No full chat dump/body is added to logs/audits; production backup erasure remains a deployment task.
+
+## Platform avatar erasure
+
+Original uploaded bytes and EXIF/GPS metadata are not retained. Only normalized
+WebP pixels are stored under an opaque key. Replace, remove and account deletion
+transactionally retire the former reference and enqueue durable file deletion.
+The API attempts post-commit cleanup; the Worker retries bounded batches of 20.
+Storage failure retains the queue; it cannot guarantee physical erasure while
+storage/Worker is unavailable. Current active references are independently guarded.
+
+Crash-orphan reconciliation is an explicit bounded maintenance command, eligible
+after 24 hours, not an unattended scheduler. Clearing Steam imports preserves the
+independent platform avatar. No real owner account was deleted for verification.
+See [AVATAR_STORAGE](AVATAR_STORAGE.md) for the command and deployment boundary.

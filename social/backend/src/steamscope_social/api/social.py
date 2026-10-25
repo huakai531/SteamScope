@@ -41,6 +41,7 @@ from steamscope_social.modules.social.service import (
     verified_user,
     visible_person,
 )
+from steamscope_social.modules.users.avatars import avatar_url
 from steamscope_social.modules.users.models import User
 
 router = APIRouter(
@@ -72,7 +73,10 @@ async def search(request: Request, q: str = Query(min_length=3, max_length=64)) 
             .limit(20)
         )
         return PersonList(
-            items=[Person(handle=u.handle, display_name=u.display_name) for u in users]
+            items=[
+                Person(handle=u.handle, display_name=u.display_name, avatar_url=avatar_url(u))
+                for u in users
+            ]
         )
 
 

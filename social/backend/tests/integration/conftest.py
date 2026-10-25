@@ -68,12 +68,13 @@ class AuthHarness:
 
 
 @pytest.fixture
-async def auth():
+async def auth(tmp_path):
     config = Settings()
     assert config.environment == "test"
     assert make_url(config.database_url.get_secret_value()).database == "steamscope_social_test"
     config = config.model_copy(
         update={
+            "avatar_storage_dir": tmp_path / "avatars",
             "redis_namespace": "test_" + uuid4().hex,
             "auth_rate_limit": 1000,
             "sensitive_rate_limit": 1000,

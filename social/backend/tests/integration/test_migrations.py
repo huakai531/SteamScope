@@ -30,6 +30,7 @@ pytestmark = pytest.mark.integration
 DATABASE = "steamscope_social_migration_test"
 BACKEND = Path(__file__).resolve().parents[2]
 TABLES = {
+    "avatar_deletions",
     "conversations",
     "conversation_members",
     "messages",
@@ -190,6 +191,30 @@ async def test_fresh_migration_constraints_and_disposable_rollback_reupgrade():
                 {"id": uuid4(), "owner": owner, "link": link},
             )
         await command("upgrade", "0003_phase3b_steam_details")
+        await command("upgrade", "0005_phase6_chat")
+        await command("upgrade", "head")
+        async with engine.begin() as connection:
+            await connection.execute(
+                text("UPDATE users SET avatar_key=:key WHERE id=:id"),
+                {"key": "a" * 32 + ".webp", "id": owner},
+            )
+        await command(
+            "downgrade",
+            "0005_phase6_chat",
+            expected=1,
+            failure_message="Refusing downgrade with existing avatar data",
+        )
+        async with engine.begin() as connection:
+            assert (
+                await connection.scalar(
+                    text("SELECT avatar_key FROM users WHERE id=:id"), {"id": owner}
+                )
+                == "a" * 32 + ".webp"
+            )
+            await connection.execute(
+                text("UPDATE users SET avatar_key=NULL WHERE id=:id"), {"id": owner}
+            )
+        await command("downgrade", "0005_phase6_chat")
         await command("upgrade", "head")
         assert await tables() == TABLES | {"alembic_version"}
         await command("check")
@@ -258,7 +283,7 @@ async def test_fresh_migration_constraints_and_disposable_rollback_reupgrade():
             )
             assert (
                 await connection.scalar(text("SELECT version_num FROM alembic_version"))
-                == "0005_phase6_chat"
+                == "0006_game_visuals_avatars"
             )
             await connection.execute(delete(Conversation).where(Conversation.id == conversation_id))
         await command(
@@ -276,7 +301,7 @@ async def test_fresh_migration_constraints_and_disposable_rollback_reupgrade():
             )
             assert (
                 await connection.scalar(text("SELECT version_num FROM alembic_version"))
-                == "0005_phase6_chat"
+                == "0006_game_visuals_avatars"
             )
             await connection.execute(delete(User).where(User.id == partner))
         for revision in ("0002_phase3a_steam_sync", "head"):

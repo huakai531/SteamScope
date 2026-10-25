@@ -527,6 +527,7 @@ export function ChatApp() {
                       <span className="conversation-avatar">
                         <PlayerAvatar
                           name={c.person?.display_name ?? "Player"}
+                          uploadedSrc={c.person?.avatar_url}
                         />
                         {c.id === selected &&
                           connection === "Connected" &&
@@ -614,6 +615,7 @@ export function ChatApp() {
                       </button>
                       <PlayerAvatar
                         name={detail.person?.display_name ?? "Player"}
+                        uploadedSrc={detail.person?.avatar_url}
                       />
                       <div>
                         <h2>{detail.person?.display_name ?? "Conversation"}</h2>

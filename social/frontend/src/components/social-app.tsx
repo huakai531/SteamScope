@@ -112,7 +112,10 @@ function useRead<T>(path: string, enabled = true) {
 function PersonLink({ person }: { person: Person | null }) {
   return person ? (
     <Link className="person-link" href={`/users/${person.handle}`}>
-      <PlayerAvatar name={person.display_name} />
+      <PlayerAvatar
+        uploadedSrc={person.avatar_url}
+        name={person.display_name}
+      />
       <strong>{person.display_name}</strong> <span>@{person.handle}</span>
     </Link>
   ) : (

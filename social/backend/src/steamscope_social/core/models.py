@@ -30,9 +30,10 @@ from steamscope_social.modules.steam.models import (
     UserAchievement,
     UserGame,
 )
-from steamscope_social.modules.users.models import User
+from steamscope_social.modules.users.models import AvatarDeletion, User
 
 __all__ = [
+    "AvatarDeletion",
     "Conversation",
     "ConversationMember",
     "Message",

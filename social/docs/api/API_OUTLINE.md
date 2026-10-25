@@ -158,3 +158,25 @@ prevent ordinary APIs from exposing deleted or unauthorized content.
 WS /api/v1/ws uses the existing HttpOnly cookie and exact Origin, no query parameters. The
 [versioned WebSocket contract](../architecture/DIRECT_CHAT.md#websocket-contract-v1) supplements
 OpenAPI, which does not model WebSockets. Redis hints never constitute successful persistence.
+
+## Game visual and platform-avatar extension
+
+Authorized game DTOs include `visual: {icon_url: string|null, thumbnail_url:
+string|null, card_url: string|null, source: "steam"|"unavailable"}`. Artwork
+candidates derive from the authorized AppID; availability is resolved by the
+browser with sequential fallbacks. See [Game visuals](../architecture/GAME_VISUALS.md).
+Account/profile/person DTOs include nullable `avatar_url`.
+These are derived references, not additional access grants; original library,
+profile, connection and block policies still apply before serialization.
+
+- `POST /api/v1/me/avatar`: raw `image/png`, `image/jpeg` or `image/webp` body,
+  maximum 5 MiB; authenticated owner, exact Origin and CSRF; returns AccountView.
+- `DELETE /api/v1/me/avatar`: same mutation authorization; returns AccountView.
+- `GET /api/v1/users/{handle}/avatar/{key}`: authenticated authorized viewer,
+  current active key; private/no-store WebP, nosniff, same-origin resource policy.
+
+Unsupported media returns 415; oversized bodies 413; invalid images/dimensions
+422; storage write failure 503; unavailable/unauthorized image 404 after normal
+session checks. No arbitrary image URL or client owner ID is accepted. Generated
+OpenAPI and frontend types include these contracts. See [full validation/storage
+contract](../security/AVATAR_STORAGE.md).

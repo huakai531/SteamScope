@@ -126,3 +126,17 @@ No imported Steam friend grants authority. Existing sockets check current sessio
 with a tested8s operational revocation target; in-flight packets are not retractable. Current
 chat/session data are cleared on unavailable/logout; auth restoration rechecks server state.
 See DIRECT_CHAT for limits and read-history exception after voluntary connection removal.
+
+## Platform avatar and game visuals
+
+Uploaded SteamScope avatars follow profile visibility, including connections-only,
+private and both-direction blocks. Each image read rechecks current authorization
+and active key; opaque filenames alone are not authorization. Responses are private
+and not cached. Directed request/notification consent does not grant profile-avatar
+access. No public upload directory or image optimizer cache is exposed.
+
+Game icons are included only in already-authorized game projections. The browser
+may fetch the public Steam media CDN image (IP/AppID visible to that CDN), with
+no referrer and no SteamScope cookies, API key or Steam account identity. Shared
+game artwork cannot be used to query another user's library. See
+[GAME_VISUALS](../architecture/GAME_VISUALS.md) and [AVATAR_STORAGE](AVATAR_STORAGE.md).

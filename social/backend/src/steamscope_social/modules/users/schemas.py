@@ -52,6 +52,7 @@ class ProfileUpdate(BaseModel):
 
 
 class AccountView(BaseModel):
+    avatar_url: str | None = None
     id: UUID
     handle: str
     display_name: str

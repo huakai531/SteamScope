@@ -4,6 +4,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from steamscope_social.modules.steam.schemas import AchievementView
+from steamscope_social.modules.steam.visuals import GameVisual
 
 
 class PlayerState(BaseModel):
@@ -24,6 +25,7 @@ class PlayerProgress(BaseModel):
 
 
 class PlayerGame(BaseModel):
+    visual: GameVisual = Field(default_factory=GameVisual)
     app_id: int
     name: str | None
     total_minutes: int | None = None
@@ -33,6 +35,7 @@ class PlayerGame(BaseModel):
 
 
 class PlayerProfile(BaseModel):
+    avatar_url: str | None = None
     handle: str
     display_name: str
     biography: str
@@ -78,6 +81,7 @@ class PlayerAchievements(BaseModel):
 
 
 class MutualGame(BaseModel):
+    visual: GameVisual = Field(default_factory=GameVisual)
     app_id: int
     name: str | None
     left_minutes: int | None

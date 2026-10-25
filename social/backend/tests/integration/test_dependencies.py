@@ -31,6 +31,7 @@ async def test_real_postgres_redis_and_phase2_tables():
                 .all()
             )
             assert set(tables) == {
+                "avatar_deletions",
                 "conversations",
                 "conversation_members",
                 "messages",

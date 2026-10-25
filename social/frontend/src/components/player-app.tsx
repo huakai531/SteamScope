@@ -11,7 +11,7 @@ import { AppShell } from "./app-shell";
 import {
   PlayerAvatar,
   GameArt,
-  GameIcon,
+  GameThumbnail,
   Icon,
   StatusBadge,
   HelpDisclosure,
@@ -192,7 +192,11 @@ export function PlayerApp({
           {(p) => (
             <>
               <header className="player-identity">
-                <PlayerAvatar name={p.display_name} large />
+                <PlayerAvatar
+                  uploadedSrc={p.avatar_url}
+                  name={p.display_name}
+                  large
+                />
                 <div className="profile-heading">
                   <h1>{p.display_name}</h1>
                   <p className="player-handle">
@@ -323,8 +327,10 @@ function GamingIdentityCard({
           {p.most_played.slice(0, 3).map((g) => (
             <Link key={g.app_id} href={`${base}/games/${g.app_id}`}>
               <GameArt
+                variant="card"
                 title={g.name ?? "Game title unavailable"}
                 appId={g.app_id}
+                visual={g.visual}
               />
               <strong>{g.name ?? `Game ${g.app_id}`}</strong>
               <span>
@@ -456,7 +462,12 @@ function GameList({
     <ul className="player-game-list">
       {items.map((g) => (
         <li key={g.app_id}>
-          <GameIcon title={g.name ?? "Game"} appId={g.app_id} />
+          <GameThumbnail
+            size={48}
+            title={g.name ?? "Game"}
+            appId={g.app_id}
+            visual={g.visual}
+          />
           <Link href={`${base}/games/${g.app_id}`}>
             {g.name ?? `Game ${g.app_id}`}
           </Link>
@@ -581,7 +592,12 @@ function LibraryPage({ handle, params }: { handle: string; params: string }) {
           <div className="player-library">
             {data.items.map((g) => (
               <article key={g.app_id} className="player-card library-game-card">
-                <GameArt title={g.name ?? "Game"} appId={g.app_id} />
+                <GameArt
+                  variant="card"
+                  title={g.name ?? "Game"}
+                  appId={g.app_id}
+                  visual={g.visual}
+                />
                 <div className="game-card-content">
                   <h3>
                     <Link href={`/users/${handle}/games/${g.app_id}`}>
@@ -692,8 +708,10 @@ function GameDetail({ handle, appid }: { handle: string; appid: string }) {
           <section className="player-card game-detail-summary">
             <div className="game-detail-identity">
               <GameArt
+                variant="thumbnail"
                 title={data.game.name ?? "Game"}
                 appId={data.game.app_id}
+                visual={data.game.visual}
               />
               <div>
                 <h2>{data.game.name ?? `Game ${appid}`}</h2>
@@ -865,9 +883,10 @@ function Compare({ handle }: { handle: string }) {
                     className="comparison-game-name"
                     href={`/users/${handle}/games/${g.app_id}`}
                   >
-                    <GameIcon
+                    <GameThumbnail
                       title={g.name ?? "Game title unavailable"}
                       appId={g.app_id}
+                      visual={g.visual}
                     />
                     {g.name ?? `Game ${g.app_id}`}
                   </Link>

@@ -196,7 +196,9 @@ for (const count of [0, 1, 2, 5]) {
       await expect(
         page.getByRole("button", { name: "Connect", exact: true }),
       ).toHaveCount(count);
-      expect(await page.locator(".game-icon").count()).toBe(count * 3);
+      await expect(
+        page.locator('.mutual-games .game-art[data-variant="thumbnail"]'),
+      ).toHaveCount(count * 3);
     } else
       await expect(
         page.getByText("No recommendations yet.", { exact: false }),

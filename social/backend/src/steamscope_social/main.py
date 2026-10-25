@@ -15,6 +15,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette.exceptions import HTTPException
 
 from steamscope_social.api.account import router as account_router
+from steamscope_social.api.avatars import router as avatars_router
 from steamscope_social.api.chat import router as chat_router
 from steamscope_social.api.contract import document_account_security
 from steamscope_social.api.health import router as health_router
@@ -174,6 +175,7 @@ def create_app(
 
     app.include_router(health_router)
     app.include_router(account_router)
+    app.include_router(avatars_router)
     app.include_router(chat_router)
     app.include_router(realtime_router)
     app.include_router(steam_router)

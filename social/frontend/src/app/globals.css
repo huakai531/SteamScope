@@ -203,9 +203,6 @@ main {
   color: var(--accent);
   font-size: 34px;
 }
-.brand-symbol {
-  display: none;
-}
 .eyebrow {
   color: var(--metadata);
   font-size: 11px;
@@ -1486,151 +1483,10 @@ main {
 .login-page > .brand {
   margin-bottom: 32px;
 }
-.site-header {
-  max-width: 1240px;
-  margin: auto;
-  min-height: 88px;
-  padding: 24px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-}
-.site-header nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  font-size: 13px;
-  color: var(--muted);
-}
-.phase-pill {
-  font-size: 11px;
-  color: var(--muted);
-}
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 55px;
-  padding: 55px 0 65px;
-}
-.hero h1 {
-  font-size: clamp(40px, 4vw, 56px);
-}
-.hero h1 span {
-  color: var(--accent);
-}
-.hero-description {
-  color: var(--muted);
-  max-width: 47ch;
-}
-.hero-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-top: 24px;
-  font-size: 13px;
-}
 .small-note {
   font-size: 11px;
   color: var(--metadata);
   margin-top: 20px;
-}
-.connection-map {
-  position: relative;
-  height: 350px;
-  background: var(--panel);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.map-top,
-.map-bottom {
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 8px;
-  letter-spacing: 1px;
-  color: var(--metadata);
-}
-.map-top {
-  top: 20px;
-}
-.map-bottom {
-  bottom: 20px;
-}
-.orbit {
-  position: absolute;
-  width: 220px;
-  height: 220px;
-  border: 1px solid #364157;
-  border-radius: 50%;
-  left: calc(50% - 110px);
-  top: 65px;
-}
-.orbit-two {
-  width: 300px;
-  height: 300px;
-  left: calc(50% - 150px);
-  top: 25px;
-  border-style: dashed;
-  opacity: 0.5;
-}
-.map-center {
-  position: absolute;
-  left: calc(50% - 50px);
-  top: 125px;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #17243b;
-}
-.map-center strong {
-  font-size: 20px;
-}
-.map-center span:last-child {
-  font-size: 7px;
-}
-.center-scope {
-  font-size: 24px;
-}
-.map-node {
-  position: absolute;
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  column-gap: 8px;
-  padding: 14px;
-  background: #252d3c;
-  border-radius: 8px;
-  font-size: 11px;
-}
-.map-node strong {
-  grid-column: 2;
-  font-weight: 500;
-}
-.node-icon {
-  grid-row: span 2;
-  font-size: 25px;
-  color: var(--accent);
-}
-.node-games {
-  top: 70px;
-  left: 16px;
-}
-.node-people {
-  bottom: 70px;
-  right: 16px;
-}
-.blueprint {
-  padding: 50px 0;
-  border-top: 1px solid var(--line);
 }
 .section-heading {
   display: grid;
@@ -1643,24 +1499,6 @@ main {
 .section-heading p:last-child {
   color: var(--muted);
   font-size: 13px;
-}
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  margin-top: 36px;
-}
-.steps p {
-  color: var(--muted);
-  font-size: 13px;
-}
-.step-number,
-.step-label {
-  font-size: 11px;
-  color: var(--metadata);
-}
-.steps h3 {
-  margin-top: 16px;
 }
 .status-panel {
   display: grid;
@@ -1698,14 +1536,6 @@ main {
   justify-self: start;
   font-size: 12px;
 }
-.principles {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: var(--muted);
-  padding: 24px 0;
-}
 footer {
   display: flex;
   align-items: center;
@@ -1717,9 +1547,6 @@ footer {
   color: var(--metadata);
   font-size: 11px;
   border-top: 1px solid var(--line);
-}
-.footer-brand {
-  font-size: 20px;
 }
 .account-footer {
   font-size: 11px;
@@ -2001,42 +1828,15 @@ footer {
     flex-direction: column;
     align-items: flex-start;
   }
-  .site-header {
-    padding: 22px;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .phase-pill {
-    display: none;
-  }
-  .site-header nav {
-    gap: 15px;
-    font-size: 12px;
-  }
   main {
     padding: 22px;
   }
-  .hero {
-    grid-template-columns: 1fr;
-    padding: 30px 0;
-    gap: 30px;
-  }
-  .hero h1 {
-    font-size: 40px;
-  }
   .section-heading,
-  .steps,
   .status-panel {
     grid-template-columns: 1fr;
   }
   .section-heading .eyebrow {
     grid-column: 1;
-  }
-  .steps {
-    gap: 20px;
-  }
-  .map-bottom span:last-child {
-    display: none;
   }
   footer {
     padding: 24px 22px;

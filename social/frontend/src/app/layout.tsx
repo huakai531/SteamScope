@@ -9,7 +9,7 @@ import "./product-polish.css";
 import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
-  title: "SteamScope — Your games. Your people.",
+  title: "SteamScope — Find your people. Through play.",
   description:
     "Turn your Steam library into a gaming identity. Discover players, connect and chat in real time, with privacy on your terms.",
 };
